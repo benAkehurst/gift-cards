@@ -36,7 +36,8 @@ exports.create_a_user = (req, res) => {
   let newUser = new User({
     name: req.body.name,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10)
+    password: bcrypt.hashSync(req.body.password, 10),
+    userId: createId()
   });
   newUser.save((err, user) => {
     if (err) {
@@ -46,13 +47,7 @@ exports.create_a_user = (req, res) => {
         code: 400
       });
     }
-    let userFiltered = _.pick(user.toObject(), [
-      'name',
-      'email',
-      'created_date',
-      '_id',
-      'status'
-    ]);
+    let userFiltered = _.pick(user.toObject(), ['name', '_id', 'userId']);
     res.status(201).json({
       message: 'User created',
       success: true,
@@ -189,5 +184,14 @@ exports.delete_a_user = (req, res) => {
         code: 200
       });
     }
+  );
+};
+
+const createId = () => {
+  return (
+    '_' +
+    Math.random()
+      .toString(36)
+      .substr(2, 8)
   );
 };

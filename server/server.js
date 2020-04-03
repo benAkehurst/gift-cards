@@ -17,7 +17,8 @@ require('dotenv').config();
 // DB Connection
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  `mongodb://${process.env.DB_CONNECT}`,
+  // `mongodb://${process.env.DB_CONNECT}`,
+  `mongodb://localhost:27017/gift_card_db`,
   {
     useNewUrlParser: true,
     useCreateIndex: true

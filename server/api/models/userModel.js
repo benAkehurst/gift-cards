@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: false
+    required: true
   },
   email: {
     type: String,
@@ -15,18 +15,13 @@ const UserSchema = new Schema({
     type: String,
     unique: true
   },
+  userId: {
+    type: String
+  },
   created_date: {
     type: Date,
     default: Date.now
-  },
-  status: {
-    type: [{
-      type: String,
-      enum: ['pending', 'aproved', 'deleted']
-    }],
-    default: ['aproved']
   }
 });
-
 
 module.exports = mongoose.model('User', UserSchema);
