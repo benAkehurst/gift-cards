@@ -18,6 +18,16 @@ const UserSchema = new Schema({
   userId: {
     type: String
   },
+  current_stamps: {
+    type: Number,
+    default: 0
+  },
+  completed_cards: {
+    type: Array
+  },
+  transactions: {
+    type: Array
+  },
   created_date: {
     type: Date,
     default: Date.now
