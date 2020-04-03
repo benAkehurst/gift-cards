@@ -28,6 +28,10 @@ const UserSchema = new Schema({
   transactions: {
     type: Array
   },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
   created_date: {
     type: Date,
     default: Date.now
