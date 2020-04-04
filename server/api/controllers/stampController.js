@@ -146,6 +146,65 @@ exports.add_stamp = (req, res) => {
           User.updateOne(
             { customerId: customerId },
             { $set: { current_stamps: 0 } },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error reseting stamps to 0'
+                });
+              }
+            }
+          );
+          return res.status(200).json({
+            success: true,
+            title: 'Stamp added',
+            data: {
+              msg: 'User has freebie...'
+            }
+          });
+        }
+        if (newTotal > 10) {
+          /**
+           * Reset current_stamps to number past 10 - new total
+           */
+          User.updateOne(
+            { customerId: customerId },
+            { $set: { current_stamps: newTotal - 10 } },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error reseting stamps new total'
+                });
+              }
+            }
+          );
+          /**
+           * Updates the completed card array
+           */
+          User.updateOne(
+            { customerId: customerId },
+            {
+              $push: {
+                completed_cards: {
+                  completed_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error adding completed card array'
+                });
+              }
+            }
+          );
+          /**
+           * Updates the transaction array
+           */
+          User.updateOne(
+            { customerId: customerId },
             {
               $push: {
                 transactions: {
@@ -158,20 +217,26 @@ exports.add_stamp = (req, res) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error reseting stamps to 0'
+                  title: 'Error adding transaction'
                 });
               }
             }
           );
+          return res.status(200).json({
+            success: true,
+            title: 'Stamp added',
+            data: {
+              msg: 'User has freebie...'
+            }
+          });
         }
+      } else {
+        return res.status(500).json({
+          success: false,
+          title: 'Stamp count not valid',
+          data: {}
+        });
       }
-      return res.status(200).json({
-        success: true,
-        title: 'Stamp added',
-        data: {
-          msg: 'User has freebie...'
-        }
-      });
     });
   });
 };
