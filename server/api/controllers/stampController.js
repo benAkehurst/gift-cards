@@ -13,8 +13,28 @@ let config = require('../../middlewares/config');
  * Function to add a stamp to a user
  */
 exports.add_stamp = (req, res) => {
-  let data = req.body;
-  res.json(data);
+  let customerId = req.body.customerId;
+  User.findOne({ customerId: customerId }, (err, user) => {
+    /**
+     * Checks if user is an admin.
+     * If false, error returned to user.
+     */
+    if (!user.isAdmin) {
+      return res.status(401).json({
+        success: false,
+        title: 'Stamping failed',
+        error: {
+          error: err,
+          message: 'User not valid'
+        }
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      title: 'Stamp added',
+      data: {}
+    });
+  });
   // User.findOne(
   //   {
   //     email: data.email
