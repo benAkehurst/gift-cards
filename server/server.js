@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // Models Imports
-const Task = require('./api/models/todoListModel');
 const User = require('./api/models/userModel');
+const Stamp = require('./api/models/stampModel');
 
 // Init Express
 const app = express();
@@ -57,10 +57,10 @@ app.use(cors());
 // Routes Definitions
 const userRoutes = require('./api/routes/userRoutes');
 const authRoutes = require('./api/routes/authRoutes');
-const todoRoutes = require('./api/routes/todoListRoutes');
+const stampRoutes = require('./api/routes/stampRoutes');
 userRoutes(app);
 authRoutes(app);
-todoRoutes(app);
+stampRoutes(app);
 
 // 404 Handling
 app.use((req, res) => {
