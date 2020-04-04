@@ -58,10 +58,8 @@ app.use(cors());
 
 // Routes Definitions
 const userRoutes = require('./api/routes/userRoutes');
-const authRoutes = require('./api/routes/authRoutes');
 const stampRoutes = require('./api/routes/stampRoutes');
 userRoutes(app);
-authRoutes(app);
 stampRoutes(app);
 
 // 404 Handling
