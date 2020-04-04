@@ -15,7 +15,7 @@ const UserSchema = new Schema({
     type: String,
     unique: true
   },
-  userId: {
+  customerId: {
     type: String
   },
   current_stamps: {

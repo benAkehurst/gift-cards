@@ -37,7 +37,7 @@ exports.create_a_user = (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 10),
-    userId: createId()
+    customerId: createId()
   });
   newUser.save((err, user) => {
     if (err) {
@@ -99,7 +99,8 @@ exports.login_a_user = (req, res) => {
         'email',
         'created_date',
         '_id',
-        'status'
+        'status',
+        'customerId'
       ]);
       res.status(200).json({
         message: 'Successfully logged in',
