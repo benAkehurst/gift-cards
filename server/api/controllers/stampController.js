@@ -45,6 +45,9 @@ exports.add_stamp = (req, res) => {
       if (currentStamps < 10) {
         let newTotal = currentStamps + stampCountToAdd;
         if (newTotal < 10) {
+          /**
+           * Updates the stamps amount
+           */
           User.updateOne(
             { customerId: customerId },
             { $set: { current_stamps: newTotal } },
@@ -65,6 +68,9 @@ exports.add_stamp = (req, res) => {
               }
             }
           );
+          /**
+           * Updates the transaction array
+           */
           User.updateOne(
             { customerId: customerId },
             {
@@ -90,14 +96,82 @@ exports.add_stamp = (req, res) => {
             data: {}
           });
         }
+        if (newTotal === 10) {
+          /**
+           * Updates the transaction array
+           */
+          User.updateOne(
+            { customerId: customerId },
+            {
+              $push: {
+                transactions: {
+                  stamp_count: stampCountToAdd,
+                  created_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error adding transaction'
+                });
+              }
+            }
+          );
+          /**
+           * Updates the completed card array
+           */
+          User.updateOne(
+            { customerId: customerId },
+            {
+              $push: {
+                completed_cards: {
+                  completed_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error adding completed card array'
+                });
+              }
+            }
+          );
+          /**
+           * Reset current_stamps to 0
+           */
+          User.updateOne(
+            { customerId: customerId },
+            { $set: { current_stamps: 0 } },
+            {
+              $push: {
+                transactions: {
+                  stamp_count: stampCountToAdd,
+                  created_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error reseting stamps to 0'
+                });
+              }
+            }
+          );
+        }
       }
-      if (currentStamps === 10) {
-      }
-      // return res.status(200).json({
-      //   success: true,
-      //   title: 'Stamp added',
-      //   data: {}
-      // });
+      return res.status(200).json({
+        success: true,
+        title: 'Stamp added',
+        data: {
+          msg: 'User has freebie...'
+        }
+      });
     });
   });
 };
