@@ -8,7 +8,6 @@ const cors = require('cors');
 // Models Imports
 const Task = require('./api/models/todoListModel');
 const User = require('./api/models/userModel');
-const Sounds = require('./api/models/soundsModel');
 
 // Init Express
 const app = express();
@@ -59,11 +58,9 @@ app.use(cors());
 const userRoutes = require('./api/routes/userRoutes');
 const authRoutes = require('./api/routes/authRoutes');
 const todoRoutes = require('./api/routes/todoListRoutes');
-const soundsRoutes = require('./api/routes/soundsRoutes');
 userRoutes(app);
 authRoutes(app);
 todoRoutes(app);
-soundsRoutes(app);
 
 // 404 Handling
 app.use((req, res) => {
