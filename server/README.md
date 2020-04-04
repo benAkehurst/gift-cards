@@ -41,6 +41,8 @@ Body:
 POST - http://localhost:3000/api/stamps/add-stamp
 Body:
 {
-  "customerId": "Users id that is generated upon signup (NOT MongoDB ID)"
+  "_id": "admins user id from mongo db",
+  "customerId": "Users id that is generated upon signup (NOT MongoDB ID)",
+  "stampsToAdd": "This needs to be a number"
 }
 ```

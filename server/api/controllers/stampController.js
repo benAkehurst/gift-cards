@@ -13,8 +13,10 @@ let config = require('../../middlewares/config');
  * Function to add a stamp to a user
  */
 exports.add_stamp = (req, res) => {
+  let requester = req.body._id;
   let customerId = req.body.customerId;
-  User.findOne({ customerId: customerId }, (err, user) => {
+  let stampCountToAdd = req.body.stampsToAdd;
+  User.findOne({ _id: requester }, (err, user) => {
     /**
      * Checks if user is an admin.
      * If false, error returned to user.
@@ -29,58 +31,73 @@ exports.add_stamp = (req, res) => {
         }
       });
     }
-    return res.status(200).json({
-      success: true,
-      title: 'Stamp added',
-      data: {}
+    /**
+     * Finds user to add stamps to in db
+     */
+    User.findOne({ customerId: customerId }, (err, user) => {
+      if (!user) {
+        return res.status(500).json({
+          success: false,
+          title: 'Error finding user to add stamp to'
+        });
+      }
+      let currentStamps = user.current_stamps;
+      if (currentStamps < 10) {
+        let newTotal = currentStamps + stampCountToAdd;
+        if (newTotal < 10) {
+          User.updateOne(
+            { customerId: customerId },
+            { $set: { current_stamps: newTotal } },
+            {
+              $push: {
+                transactions: {
+                  stamp_count: stampCountToAdd,
+                  created_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error adding stamp'
+                });
+              }
+            }
+          );
+          User.updateOne(
+            { customerId: customerId },
+            {
+              $push: {
+                transactions: {
+                  stamp_count: stampCountToAdd,
+                  created_date: new Date()
+                }
+              }
+            },
+            (err, done) => {
+              if (err) {
+                return res.status(500).json({
+                  success: false,
+                  title: 'Error adding transaction'
+                });
+              }
+            }
+          );
+          return res.status(200).json({
+            success: true,
+            title: 'Stamp added',
+            data: {}
+          });
+        }
+      }
+      if (currentStamps === 10) {
+      }
+      // return res.status(200).json({
+      //   success: true,
+      //   title: 'Stamp added',
+      //   data: {}
+      // });
     });
   });
-  // User.findOne(
-  //   {
-  //     email: data.email
-  //   },
-  //   (err, user) => {
-  //     if (err) {
-  //       return res.status(500).json({
-  //         success: false,
-  //         title: 'An error occurred',
-  //         error: err
-  //       });
-  //     }
-  //     if (!user) {
-  //       return res.status(401).json({
-  //         success: false,
-  //         title: 'Login failed',
-  //         error: {
-  //           message: 'Invalid login credentials'
-  //         }
-  //       });
-  //     }
-  //     if (!bcrypt.compareSync(data.password, user.password)) {
-  //       return res.status(401).json({
-  //         success: false,
-  //         title: 'Login failed',
-  //         error: {
-  //           message: 'Invalid login credentials'
-  //         }
-  //       });
-  //     }
-  //     let token = jwt.sign({ username: user._id }, config.secret, {
-  //       expiresIn: '24h' // expires in 24 hours
-  //     });
-  //     let userFiltered = _.pick(user.toObject(), [
-  //       'name',
-  //       'email',
-  //       'created_date',
-  //       '_id',
-  //       'status'
-  //     ]);
-  //     res.status(200).json({
-  //       message: 'Successfully logged in',
-  //       success: true,
-  //       obj: userFiltered,
-  //       token: token
-  //     });
-  //   }
-  // );
 };
