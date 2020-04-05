@@ -38,7 +38,8 @@ exports.add_stamp = (req, res) => {
       if (!user) {
         return res.status(500).json({
           success: false,
-          title: 'Error finding user to add stamp to'
+          title: 'Error finding user to add stamp to',
+          error: err
         });
       }
       let currentStamps = user.current_stamps;
