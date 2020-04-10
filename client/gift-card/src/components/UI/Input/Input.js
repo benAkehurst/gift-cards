@@ -1,79 +1,80 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classes from './Input.module.css';
 
-const input = (props) => {
-  let inputElement = null;
-  let validationError = null;
-  const inputClasses = [classes.InputElement];
+class Input extends Component {
+  render() {
+    let inputElement = null;
+    let validationError = null;
+    let inputClasses = [classes.InputElement];
 
-  if (props.invalid && props.shouldValidate && props.touched) {
-    inputClasses.push(classes.Invalid);
-  }
-  if (props.invalid && props.touched) {
-    validationError = (
-      <p className={classes.ValidationError}>
-        Please enter a valid {props.elementConfig.name}
-      </p>
+    if (this.props.invalid && this.props.shouldValidate && this.props.touched) {
+      inputClasses.push(classes.Invalid);
+    }
+    if (this.props.invalid && this.props.touched) {
+      validationError = (
+        <p className={classes.ValidationError}>
+          Please enter a valid {this.props.elementConfig.name}
+        </p>
+      );
+    }
+
+    switch (this.props.elementType) {
+      case 'input':
+        inputElement = (
+          <input
+            className={inputClasses.join(' ')}
+            {...this.props.elementConfig}
+            value={this.props.value}
+            onChange={this.props.changed}
+          />
+        );
+        break;
+      case 'text-area':
+        inputElement = (
+          <textarea
+            className={inputClasses.join(' ')}
+            {...this.props.elementConfig}
+            value={this.props.value}
+            onChange={this.props.changed}
+          />
+        );
+        break;
+      case 'select':
+        inputElement = (
+          <select
+            className={inputClasses.join(' ')}
+            value={this.props.value}
+            onChange={this.props.changed}
+          >
+            {this.props.elementConfig.options.map((option) => {
+              return (
+                <option key={option.value} value={option.value}>
+                  {option.displayValue}
+                </option>
+              );
+            })}
+          </select>
+        );
+        break;
+      default:
+        inputElement = (
+          <input
+            className={inputClasses.join(' ')}
+            {...this.props.elementConfig}
+            value={this.props.value}
+            onChange={this.props.changed}
+          />
+        );
+        break;
+    }
+    return (
+      <div className={classes.Input}>
+        <label className={classes.Label}>{this.props.label}</label>
+        {inputElement}
+        {validationError}
+      </div>
     );
   }
+}
 
-  switch (props.elementType) {
-    case 'input':
-      inputElement = (
-        <input
-          className={inputClasses.join(' ')}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
-        />
-      );
-      break;
-    case 'text-area':
-      inputElement = (
-        <textarea
-          className={inputClasses.join(' ')}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
-        />
-      );
-      break;
-    case 'select':
-      inputElement = (
-        <select
-          className={inputClasses.join(' ')}
-          value={props.value}
-          onChange={props.changed}
-        >
-          {props.elementConfig.options.map((option) => {
-            return (
-              <option key={option.value} value={option.value}>
-                {option.displayValue}
-              </option>
-            );
-          })}
-        </select>
-      );
-      break;
-    default:
-      inputElement = (
-        <input
-          className={inputClasses.join(' ')}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
-        />
-      );
-      break;
-  }
-
-  return (
-    <div className={classes.Input}>
-      <label className={classes.Label}>{props.label}</label>
-      {inputElement}
-      {validationError}
-    </div>
-  );
-};
-
-export default input;
+export default Input;
