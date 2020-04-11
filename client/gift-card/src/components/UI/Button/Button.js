@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import classes from './Button.module.css';
 
 class Button extends Component {
+  /**
+   * Props:
+   * btnType: Defines specific button styleing
+   * clicked: emits a click event handler
+   * children: Text placed between <Button></Button> tags
+   */
+
   render() {
     return (
       <button
