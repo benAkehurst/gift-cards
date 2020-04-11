@@ -1,5 +1,4 @@
 .Home {
-  border: 1px solid blue;
   height: 100vh;
   overflow: scroll;
   display: flex;
@@ -10,15 +9,24 @@
 
 .Header {
   width: 100vw;
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .Card {
   width: 100vw;
-  border: 1px solid green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .Controls {
   width: 100vw;
-  border: 1px solid yellow;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
