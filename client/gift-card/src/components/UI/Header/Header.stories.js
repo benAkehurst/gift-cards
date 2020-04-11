@@ -5,4 +5,4 @@ export default {
   title: 'Header',
 };
 
-export const Basic = () => <Header>Good Morning Ben</Header>;
+export const Basic = () => <Header userName={'Ben'}></Header>;
