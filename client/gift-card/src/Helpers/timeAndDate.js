@@ -4,7 +4,7 @@ export function getTimeOfDay() {
 
   if (curHr < 12) {
     return 'Morning';
-  } else if (curHr > 12 && curHr < 18) {
+  } else if (curHr > 12 || curHr < 18) {
     return 'Afternoon';
   } else {
     return 'Evening';
