@@ -40,6 +40,16 @@ class Home extends Component {
       });
   }
 
+  goToAccountHandler = (link) => {
+    this.props.history.push({
+      pathname: `/${link}`,
+      state: {
+        completedCards: this.state.completedCards,
+        transactions: this.state.transactions,
+      },
+    });
+  };
+
   render() {
     return (
       <div className={classes.Home}>
@@ -52,7 +62,12 @@ class Home extends Component {
         </section>
         <section className={classes.Controls}>
           <InfoDisplay dispStr={this.state.appId}></InfoDisplay>
-          <Button btnType={'General'}>Account</Button>
+          <Button
+            btnType={'General'}
+            clicked={() => this.goToAccountHandler('account')}
+          >
+            Account
+          </Button>
         </section>
       </div>
     );
