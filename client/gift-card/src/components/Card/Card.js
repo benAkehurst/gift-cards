@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './Card.module.css';
 
+import { completeOfferText } from '../../Helpers/offers';
+
 import Stamp from './Stamp/Stamp';
 
 class Card extends Component {
@@ -27,14 +29,18 @@ class Card extends Component {
 
   render() {
     let allStamps = [];
-    if (this.props.currentStamps) {
+    let content = null;
+    if (this.props.currentStamps < 10) {
       let stamps = this.renderStamps();
       let hasStamps = this.addStamps();
       allStamps.push(hasStamps, stamps);
     }
     return (
       <div className={classes.Card}>
-        <div className={classes.StampContianer}>{allStamps}</div>
+        <div className={classes.StampContianer}>
+          {allStamps}
+          {this.props.currentStamps >= 10 ? completeOfferText() : null}
+        </div>
       </div>
     );
   }
