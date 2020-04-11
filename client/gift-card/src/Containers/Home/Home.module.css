@@ -1,0 +1,24 @@
+.Home {
+  border: 1px solid blue;
+  height: 100vh;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Header {
+  width: 100vw;
+  border: 1px solid red;
+}
+
+.Card {
+  width: 100vw;
+  border: 1px solid green;
+}
+
+.Controls {
+  width: 100vw;
+  border: 1px solid yellow;
+}

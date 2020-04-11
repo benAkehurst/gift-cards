@@ -1,18 +1,25 @@
-import React from 'react';
-import './App.css';
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
-import Button from './components/UI/Button/Button';
-import Header from './components/UI/Header/Header';
-import InfoDisplay from './components/UI/InfoDisplay/InfoDisplay';
+import Layout from './hoc/Layout/Layout';
+import Auth from './Containers/Auth/Auth';
+import Home from './Containers/Home/Home';
+import Admin from './Containers/Admin/Admin';
 
-function App() {
-  return (
-    <div className="App">
-      <Header userName={'Ben'}></Header>
-      <Button btnType="General">Click Me</Button>
-      <InfoDisplay>ID - Asdads</InfoDisplay>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Layout>
+          <Switch>
+            <Route path="/" exact component={Home}></Route>
+            <Route path="/auth" component={Auth}></Route>
+            <Route path="/admin" component={Admin}></Route>
+          </Switch>
+        </Layout>
+      </div>
+    );
+  }
 }
 
 export default App;
