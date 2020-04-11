@@ -10,19 +10,48 @@ import Button from '../../components/UI/Button/Button';
 import Card from '../../components/Card/Card';
 
 class Home extends Component {
-  state = {};
+  state = {
+    name: null,
+    currentStamps: 0,
+    completedCards: null,
+    transactions: null,
+    appId: null,
+    isLoading: false,
+  };
+
+  componentDidMount() {
+    axios
+      .get('/user/5e8877c4632bda97ed6a934a')
+      .then((res) => {
+        if (res.data.data) {
+          this.setState({
+            name: res.data.data.name,
+            currentStamps: res.data.data.current_stamps,
+            completedCards: res.data.data.completed_cards,
+            transactions: res.data.data.transactions,
+            appId: res.data.data.customerId,
+            isLoading: false,
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({ error: true, isLoading: false });
+        console.log(err);
+      });
+  }
+
   render() {
     return (
       <div className={classes.Home}>
         <section className={classes.Header}>
           <Banner>Tasty Coffe Rewards</Banner>
-          <Header userName={'Ben'}></Header>
+          <Header userName={this.state.name}></Header>
           <section className={classes.Card}>
-            <Card></Card>
+            <Card currentStamps={this.state.currentStamps}></Card>
           </section>
         </section>
         <section className={classes.Controls}>
-          <InfoDisplay>ID - AAAA</InfoDisplay>
+          <InfoDisplay dispStr={this.state.appId}></InfoDisplay>
           <Button btnType={'General'}>Account</Button>
         </section>
       </div>
