@@ -8,7 +8,7 @@ import InfoDisplay from './components/UI/InfoDisplay/InfoDisplay';
 function App() {
   return (
     <div className="App">
-      <Header>Good Morning Ben!</Header>
+      <Header userName={'Ben'}></Header>
       <Button btnType="General">Click Me</Button>
       <InfoDisplay>ID - Asdads</InfoDisplay>
     </div>
