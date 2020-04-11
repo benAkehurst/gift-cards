@@ -8,7 +8,11 @@ class InfoDisplay extends Component {
    */
 
   render() {
-    return <p className={classes.InfoDispalay}>{this.props.children}</p>;
+    let appId = null;
+    if (this.props.dispStr) {
+      appId = this.props.dispStr.substr(1);
+    }
+    return <p className={classes.InfoDispalay}>ID - {appId}</p>;
   }
 }
 
