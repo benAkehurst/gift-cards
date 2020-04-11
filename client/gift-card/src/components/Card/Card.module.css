@@ -1,0 +1,19 @@
+.Card {
+  width: 16rem;
+  height: 21rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #a8b9bd;
+  border: 1px solid #7c8486;
+  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+}
+
+.StampContianer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-around;
+}
