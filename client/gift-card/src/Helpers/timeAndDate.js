@@ -10,3 +10,15 @@ export function getTimeOfDay() {
     return 'Evening';
   }
 }
+
+export function dateFormatter(date) {
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  let data = new Date(date);
+  let formatted = data.toLocaleDateString('en-GB', options);
+  return formatted;
+}

@@ -1,0 +1,17 @@
+.History {
+  font-size: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.History ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+.History li {
+  margin: 1rem 0;
+}
