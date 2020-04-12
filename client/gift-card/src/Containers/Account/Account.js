@@ -3,28 +3,42 @@ import classes from './Account.module.css';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
+import Banner from '../../components/UI/Banner/Banner';
+import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
+import Button from '../../components/UI/Button/Button';
+import History from '../../components/History/History';
+import Divider from '../../components/UI/Divider/Divider';
+
 class Account extends Component {
-  state = {
-    completedCards: null,
-    transactions: null,
+  goBackHandler = () => {
+    this.props.history.goBack();
   };
 
-  componentDidMount() {
-    console.log(this.props.location.state);
-    this.setState({
-      completedCards: [...this.props.location.state.completedCards],
-      transactions: [...this.props.location.state.transactions],
-    });
-  }
   render() {
     return (
       <div className={classes.Account}>
-        <h1>Account</h1>
-        {this.state.completedCards ? (
-          <ul>
-            <li>{this.state.transactions[0].created_date}</li>
-          </ul>
-        ) : null}
+        <section className={classes.Header}>
+          <Banner>Tasty Coffe Rewards</Banner>
+        </section>
+        <section className={classes.HistoryContainer}>
+          <History
+            historyData={this.props.location.state.transactions}
+            title={'Stamps'}
+            display={'stamps'}
+          />
+          <Divider size={'small'} />
+          <History
+            historyData={this.props.location.state.completedCards}
+            title={'Completed Cards'}
+            display={'completed'}
+          />{' '}
+        </section>
+        <section className={classes.Controls}>
+          <InfoDisplay dispStr={this.props.location.state.appId}></InfoDisplay>
+          <Button btnType={'General'} clicked={this.goBackHandler}>
+            Account
+          </Button>
+        </section>
       </div>
     );
   }
