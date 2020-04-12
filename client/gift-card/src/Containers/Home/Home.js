@@ -46,6 +46,7 @@ class Home extends Component {
       state: {
         completedCards: this.state.completedCards,
         transactions: this.state.transactions,
+        appId: this.state.appId,
       },
     });
   };
