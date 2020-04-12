@@ -26,34 +26,8 @@ class Input extends Component {
             {...this.props.elementConfig}
             value={this.props.value}
             onChange={this.props.changed}
+            name={this.props.elementType}
           />
-        );
-        break;
-      case 'text-area':
-        inputElement = (
-          <textarea
-            className={inputClasses.join(' ')}
-            {...this.props.elementConfig}
-            value={this.props.value}
-            onChange={this.props.changed}
-          />
-        );
-        break;
-      case 'select':
-        inputElement = (
-          <select
-            className={inputClasses.join(' ')}
-            value={this.props.value}
-            onChange={this.props.changed}
-          >
-            {this.props.elementConfig.options.map((option) => {
-              return (
-                <option key={option.value} value={option.value}>
-                  {option.displayValue}
-                </option>
-              );
-            })}
-          </select>
         );
         break;
       default:
@@ -69,7 +43,9 @@ class Input extends Component {
     }
     return (
       <div className={classes.Input}>
-        <label className={classes.Label}>{this.props.label}</label>
+        <label className={classes.Label} for={this.props.elementType}>
+          {this.props.label}
+        </label>
         {inputElement}
         {validationError}
       </div>

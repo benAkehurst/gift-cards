@@ -1,3 +1,16 @@
 .Auth {
-  color: yellow;
+  height: 100vh;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Header {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
