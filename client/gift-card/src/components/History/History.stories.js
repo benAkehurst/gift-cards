@@ -22,17 +22,17 @@ const stampsCard = [
   { stamp_count: 1, created_date: '2020-04-02T13:40:27.598Z' },
 ];
 
-export const Basic = () => <History items={basicItems}></History>;
+export const Basic = () => <History historyData={basicItems}></History>;
 export const Completed = () => (
   <History
-    items={completedCard}
+    historyData={completedCard}
     display={'completed'}
     title={'Completed Cards'}
   ></History>
 );
 export const Stamps = () => (
   <History
-    items={stampsCard}
+    historyData={stampsCard}
     display={'stamps'}
     title={'Stamps History'}
   ></History>

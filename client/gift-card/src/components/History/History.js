@@ -6,7 +6,7 @@ import { dateFormatter } from '../../Helpers/timeAndDate';
 class History extends Component {
   /**
    * Props:
-   * items - data to display
+   * historyData - data to display
    * title - a title to display
    * display - what data to display
    */
@@ -15,7 +15,7 @@ class History extends Component {
     let itemsList = null;
     switch (this.props.display) {
       case 'completed':
-        itemsList = this.props.items.map((item) => {
+        itemsList = this.props.historyData.map((item) => {
           return (
             <li key={item.completed_date}>
               {dateFormatter(item.completed_date)}
@@ -24,7 +24,7 @@ class History extends Component {
         });
         break;
       case 'stamps':
-        itemsList = this.props.items.map((item) => {
+        itemsList = this.props.historyData.map((item) => {
           return (
             <li key={item.created_date}>
               {dateFormatter(item.created_date)} - {item.stamp_count}{' '}
