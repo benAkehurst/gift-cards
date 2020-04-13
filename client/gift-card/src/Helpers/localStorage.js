@@ -1,5 +1,5 @@
-export function addToken(token) {
-  window.localStorage.setItem('token', token);
+export function addAdminStatus(token) {
+  window.localStorage.setItem('admin', token);
   return true;
 }
 
@@ -8,8 +8,8 @@ export function addId(id) {
   return true;
 }
 
-export function getToken() {
-  return window.localStorage.getItem('token') || null;
+export function getAdminStatus() {
+  return window.localStorage.getItem('admin') || null;
 }
 
 export function getUserId() {
@@ -17,7 +17,7 @@ export function getUserId() {
 }
 
 export function clearStorage() {
-  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('admin');
   window.localStorage.removeItem('id');
   return true;
 }

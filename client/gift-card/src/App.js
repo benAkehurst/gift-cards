@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { PrivateRoute } from './hoc/PrivateRoute/PrivateRoute';
 
 import Layout from './hoc/Layout/Layout';
 import Auth from './Containers/Auth/Auth';
@@ -13,10 +14,10 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
-            <Route path="/" exact component={Home}></Route>
-            <Route path="/account" component={Account}></Route>
             <Route path="/auth" component={Auth}></Route>
-            <Route path="/admin" component={Admin}></Route>
+            <Route path="/home" component={Home}></Route>
+            <Route path="/account" component={Account}></Route>
+            <PrivateRoute exact path="/admin" component={Admin} />
           </Switch>
         </Layout>
       </div>
