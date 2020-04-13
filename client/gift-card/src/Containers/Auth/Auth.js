@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './Auth.module.css';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { addAdminStatus, addId } from '../../Helpers/localStorage';
 
 import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
@@ -163,9 +164,16 @@ class Auth extends Component {
         .post('/user/login', data)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data);
-            // if admin - set id and redirect to admin page
-            // if user - set id and redirect to home page
+            console.log(res.data.obj);
+            if (res.data.obj.isAdmin) {
+              addAdminStatus(true);
+              addId(res.data.obj._id);
+              this.props.history.push({ pathname: '/admin' });
+            } else {
+              addAdminStatus(false);
+              addId(res.data.obj._id);
+              this.props.history.push({ pathname: '/home' });
+            }
           }
         })
         .catch((err) => {
