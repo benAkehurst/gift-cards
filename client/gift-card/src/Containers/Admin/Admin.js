@@ -112,6 +112,8 @@ class Admin extends Component {
       <div className={classes.Admin}>
         <section className={classes.Header}>
           <Banner>Tasty Coffe Rewards</Banner>
+          <h2>Admin Page</h2>
+          <h3>Add stamps below:</h3>
         </section>
         <section className={classes.FormContainer}>
           {form}
