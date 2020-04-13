@@ -15,7 +15,7 @@ let config = require('../../middlewares/config');
 exports.add_stamp = (req, res) => {
   let requester = req.body._id;
   let customerId = req.body.customerId;
-  let stampCountToAdd = req.body.stampsToAdd;
+  let stampCountToAdd = parseInt(req.body.stampsToAdd);
   User.findOne({ _id: requester }, (err, user) => {
     /**
      * Checks if user is an admin.
@@ -27,8 +27,8 @@ exports.add_stamp = (req, res) => {
         title: 'Stamping failed',
         error: {
           error: err,
-          message: 'User not valid'
-        }
+          message: 'User not valid',
+        },
       });
     }
     /**
@@ -39,10 +39,10 @@ exports.add_stamp = (req, res) => {
         return res.status(500).json({
           success: false,
           title: 'Error finding user to add stamp to',
-          error: err
+          error: err,
         });
       }
-      let currentStamps = user.current_stamps;
+      let currentStamps = parseInt(user.current_stamps);
       if (currentStamps < 10) {
         let newTotal = currentStamps + stampCountToAdd;
         if (newTotal < 10) {
@@ -56,15 +56,15 @@ exports.add_stamp = (req, res) => {
               $push: {
                 transactions: {
                   stamp_count: stampCountToAdd,
-                  created_date: new Date()
-                }
-              }
+                  created_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding stamp'
+                  title: 'Error adding stamp',
                 });
               }
             }
@@ -78,15 +78,15 @@ exports.add_stamp = (req, res) => {
               $push: {
                 transactions: {
                   stamp_count: stampCountToAdd,
-                  created_date: new Date()
-                }
-              }
+                  created_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding transaction'
+                  title: 'Error adding transaction',
                 });
               }
             }
@@ -94,7 +94,7 @@ exports.add_stamp = (req, res) => {
           return res.status(200).json({
             success: true,
             title: 'Stamp added',
-            data: {}
+            data: {},
           });
         }
         if (newTotal === 10) {
@@ -107,15 +107,15 @@ exports.add_stamp = (req, res) => {
               $push: {
                 transactions: {
                   stamp_count: stampCountToAdd,
-                  created_date: new Date()
-                }
-              }
+                  created_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding transaction'
+                  title: 'Error adding transaction',
                 });
               }
             }
@@ -128,15 +128,15 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 completed_cards: {
-                  completed_date: new Date()
-                }
-              }
+                  completed_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding completed card array'
+                  title: 'Error adding completed card array',
                 });
               }
             }
@@ -151,7 +151,7 @@ exports.add_stamp = (req, res) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error reseting stamps to 0'
+                  title: 'Error reseting stamps to 0',
                 });
               }
             }
@@ -160,8 +160,8 @@ exports.add_stamp = (req, res) => {
             success: true,
             title: 'Stamp added',
             data: {
-              msg: 'User has freebie...'
-            }
+              msg: 'User has freebie...',
+            },
           });
         }
         if (newTotal > 10) {
@@ -175,7 +175,7 @@ exports.add_stamp = (req, res) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error reseting stamps new total'
+                  title: 'Error reseting stamps new total',
                 });
               }
             }
@@ -188,15 +188,15 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 completed_cards: {
-                  completed_date: new Date()
-                }
-              }
+                  completed_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding completed card array'
+                  title: 'Error adding completed card array',
                 });
               }
             }
@@ -210,15 +210,15 @@ exports.add_stamp = (req, res) => {
               $push: {
                 transactions: {
                   stamp_count: stampCountToAdd,
-                  created_date: new Date()
-                }
-              }
+                  created_date: new Date(),
+                },
+              },
             },
             (err, done) => {
               if (err) {
                 return res.status(500).json({
                   success: false,
-                  title: 'Error adding transaction'
+                  title: 'Error adding transaction',
                 });
               }
             }
@@ -227,15 +227,15 @@ exports.add_stamp = (req, res) => {
             success: true,
             title: 'Stamp added',
             data: {
-              msg: 'User has freebie...'
-            }
+              msg: 'User has freebie...',
+            },
           });
         }
       } else {
         return res.status(500).json({
           success: false,
           title: 'Stamp count not valid',
-          data: {}
+          data: {},
         });
       }
     });
