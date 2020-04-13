@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 }
 
 .Header {
@@ -13,4 +12,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+}
+
+.FormContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.FormContainer form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
