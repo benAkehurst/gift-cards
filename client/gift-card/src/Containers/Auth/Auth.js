@@ -50,13 +50,14 @@ class Auth extends Component {
         value: '',
         validation: {
           required: true,
-          minLength: 6,
+          minLength: 5,
         },
         valid: false,
         touched: false,
       },
     },
     isRegister: true,
+    hasRegistered: false,
     isformValid: false,
     isLoading: false,
   };
@@ -77,7 +78,22 @@ class Auth extends Component {
         touched: true,
       },
     };
+    this.formValidHandler();
     this.setState({ controls: updatedControls });
+  };
+
+  /**
+   * Checks form validity for submit button
+   */
+  formValidHandler = () => {
+    if (
+      this.state.controls.email.valid &&
+      this.state.controls.email.value !== '' &&
+      this.state.controls.password.valid &&
+      this.state.controls.password.value !== ''
+    ) {
+      this.setState({ isformValid: true });
+    }
   };
 
   /**
@@ -110,8 +126,7 @@ class Auth extends Component {
   /**
    * Called when user clicks button to submit login/register event
    */
-  onSubmitHandler = (event) => {
-    event.preventDefault();
+  onSubmitHandler = () => {
     if (this.state.isRegister) {
       let data = {
         name: this.state.controls.userName.value,
@@ -122,11 +137,12 @@ class Auth extends Component {
       axios
         .post('/user/create', data)
         .then((res) => {
-          if (res.data.data.success) {
+          if (res.status === 201) {
             this.setState({
               showLoader: false,
               showMessage: false,
               isRegister: false,
+              hasRegistered: true,
             });
           }
         })
@@ -142,16 +158,14 @@ class Auth extends Component {
         email: this.state.controls.email.value,
         password: this.state.controls.password.value,
       };
-      this.setState({ showLoader: true });
+      this.setState({ showLoader: false });
       axios
         .post('/user/login', data)
         .then((res) => {
-          if (res.data.data.success) {
-            this.setState({
-              showLoader: false,
-              showMessage: false,
-              isRegister: false,
-            });
+          if (res.status === 200) {
+            console.log(res.data);
+            // if admin - set id and redirect to admin page
+            // if user - set id and redirect to home page
           }
         })
         .catch((err) => {
@@ -216,10 +230,10 @@ class Auth extends Component {
     const button = (
       <Button
         btnType={'Login'}
-        disabled={!this.state.formValid}
-        clicked={(event) => this.submitHandler(event)}
+        disabled={!this.state.isformValid}
+        clicked={this.onSubmitHandler}
       >
-        {!this.state.formValid ? 'Disabled' : 'Submit'}
+        {!this.state.isformValid ? 'Disabled' : 'Submit'}
       </Button>
     );
     return (
@@ -232,11 +246,13 @@ class Auth extends Component {
             Go to {this.state.isRegister ? 'Login' : 'Register'}
           </Button>
           <h2>{!this.state.isRegister ? 'Login' : 'Register Now'}</h2>
-          <form>
-            {this.state.isRegister ? registerForm : loginForm}
-            {button}
-          </form>
+          <form>{this.state.isRegister ? registerForm : loginForm}</form>
+          {button}
+          {this.state.hasRegistered ? (
+            <Banner>Thanks for registering, now login!</Banner>
+          ) : null}
         </section>
+        {this.state.showLoader ? <Spinner size={'medium'} /> : null}
       </div>
     );
   }
