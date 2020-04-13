@@ -49,6 +49,7 @@ class Admin extends Component {
    * Deals with how the inputs update the value on the state
    */
   inputChangedHandler = (event, controlName) => {
+    this.setState({ stampsSaved: false });
     const updatedControls = {
       ...this.state.controls,
       [controlName]: {
@@ -64,6 +65,7 @@ class Admin extends Component {
    * Called when user clicks button to submit login/register event
    */
   onSubmitHandler = () => {
+    this.setState({ isSaving: true, stampsSaved: false });
     const id = getUserId();
     const data = {
       _id: id,
@@ -74,11 +76,11 @@ class Admin extends Component {
       .post('/stamps/add-stamp', data)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
+          this.setState({ isSaving: false, stampsSaved: true });
         }
       })
       .catch((err) => {
-        console.log(err);
+        this.setState({ isSaving: false, stampsSaved: false });
       });
   };
 
