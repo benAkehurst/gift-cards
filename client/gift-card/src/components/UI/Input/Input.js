@@ -10,11 +10,20 @@ const input = (props) => {
     inputClasses.push(classes.Invalid);
   }
   if (props.invalid && props.touched) {
-    validationError = (
-      <p className={classes.ValidationError}>
-        Please enter a valid {props.elementConfig.name}
-      </p>
-    );
+    validationError = null;
+    if (props.elementConfig.label === 'Password') {
+      validationError = (
+        <p className={classes.ValidationError}>
+          Please enter a valid password with minimum of 6 characters
+        </p>
+      );
+    } else {
+      validationError = (
+        <p className={classes.ValidationError}>
+          Please enter a valid {props.elementConfig.label}
+        </p>
+      );
+    }
   }
 
   switch (props.elementType) {
