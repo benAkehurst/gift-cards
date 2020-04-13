@@ -44,7 +44,7 @@ class Account extends Component {
         <section className={classes.Controls}>
           <InfoDisplay dispStr={this.props.location.state.appId}></InfoDisplay>
           <Button btnType={'General'} clicked={this.goBackHandler}>
-            Account
+            Back
           </Button>
         </section>
       </div>
