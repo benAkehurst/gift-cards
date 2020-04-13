@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './Account.module.css';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { getUserId } from '../../Helpers/localStorage';
 
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
@@ -13,6 +14,13 @@ class Account extends Component {
   goBackHandler = () => {
     this.props.history.goBack();
   };
+
+  componentDidMount() {
+    const _id = getUserId();
+    if (!_id) {
+      this.props.history.push({ pathname: '/auth' });
+    }
+  }
 
   render() {
     return (

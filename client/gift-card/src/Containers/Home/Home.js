@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './Home.module.css';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { getUserId } from '../../Helpers/localStorage';
 
 import Header from '../../components/UI/Header/Header';
 import Banner from '../../components/UI/Banner/Banner';
@@ -20,8 +21,12 @@ class Home extends Component {
   };
 
   componentDidMount() {
+    const _id = getUserId();
+    if (!_id) {
+      this.props.history.push({ pathname: '/auth' });
+    }
     axios
-      .get('/user/5e8877c4632bda97ed6a934a')
+      .get(`/user/${_id}`)
       .then((res) => {
         if (res.data.data) {
           this.setState({
