@@ -14,6 +14,7 @@ class Auth extends Component {
         elementConfig: {
           type: 'text',
           placeholder: 'Your First Name',
+          label: 'Name',
         },
         value: '',
         validation: {
@@ -27,6 +28,7 @@ class Auth extends Component {
         elementConfig: {
           type: 'email',
           placeholder: 'Your Email Address',
+          label: 'Email',
         },
         value: '',
         validation: {
@@ -41,6 +43,7 @@ class Auth extends Component {
         elementConfig: {
           type: 'password',
           placeholder: 'Your Password',
+          label: 'Password',
         },
         value: '',
         validation: {
@@ -54,21 +57,20 @@ class Auth extends Component {
     isRegister: true,
   };
 
-  inputChangedHandler = (event, inputIdentifier) => {
-    const updatedOrderFrom = { ...this.state.orderForm };
-    const updatedFormElement = { ...updatedOrderFrom[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validatation
-    );
-    updatedFormElement.touched = true;
-    updatedOrderFrom[inputIdentifier] = updatedFormElement;
-    let formIsValid = true;
-    for (let inputIdentifier in updatedOrderFrom) {
-      formIsValid = updatedOrderFrom[inputIdentifier].valid && formIsValid;
-    }
-    this.setState({ orderForm: updatedOrderFrom, formIsValid: formIsValid });
+  inputChangedHandler = (event, controlName) => {
+    const updatedControls = {
+      ...this.state.controls,
+      [controlName]: {
+        ...this.state.controls[controlName],
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
+        touched: true,
+      },
+    };
+    this.setState({ controls: updatedControls });
   };
 
   checkValidity(value, rules) {
@@ -104,6 +106,7 @@ class Auth extends Component {
     const form = formElementsArray.map((formElement) => {
       return (
         <Input
+          label={formElement.config.elementConfig.label}
           key={formElement.id}
           elementType={formElement.config.elementType}
           elementConfig={formElement.config.elementConfig}
