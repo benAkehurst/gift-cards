@@ -22,3 +22,14 @@
   background-color: #a79280;
   color: #fff;
 }
+
+.Login {
+  background-color: #7ce44d;
+  color: #fff;
+}
+
+.Button:disabled {
+  color: #ccc;
+  background-color: #ddd;
+  cursor: not-allowed;
+}
