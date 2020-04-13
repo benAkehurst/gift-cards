@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import classes from './Auth.module.css';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { addAdminStatus, addId } from '../../Helpers/localStorage';
+import {
+  addAdminStatus,
+  addId,
+  clearStorage,
+} from '../../Helpers/localStorage';
 
 import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
@@ -62,6 +66,10 @@ class Auth extends Component {
     isformValid: false,
     isLoading: false,
   };
+
+  componentDidMount() {
+    clearStorage();
+  }
 
   /**
    * Deals with how the inputs update the value on the state
