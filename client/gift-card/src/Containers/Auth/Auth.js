@@ -6,6 +6,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
+import Spinner from '../../components/UI/Spinner/Spinner';
 class Auth extends Component {
   state = {
     controls: {
@@ -19,6 +20,7 @@ class Auth extends Component {
         value: '',
         validation: {
           required: true,
+          minLength: 3,
         },
         valid: false,
         touched: false,
@@ -55,8 +57,13 @@ class Auth extends Component {
       },
     },
     isRegister: true,
+    isformValid: false,
+    isLoading: false,
   };
 
+  /**
+   * Deals with how the inputs update the value on the state
+   */
   inputChangedHandler = (event, controlName) => {
     const updatedControls = {
       ...this.state.controls,
@@ -73,6 +80,11 @@ class Auth extends Component {
     this.setState({ controls: updatedControls });
   };
 
+  /**
+   * Handler for checking if an input is valid
+   * @param {value of input field} value
+   * @param {rules from state} rules
+   */
   checkValidity(value, rules) {
     let isValid = true;
     if (!rules) {
@@ -95,6 +107,74 @@ class Auth extends Component {
     return isValid;
   }
 
+  /**
+   * Called when user clicks button to submit login/register event
+   */
+  onSubmitHandler = (event) => {
+    event.preventDefault();
+    if (this.state.isRegister) {
+      let data = {
+        name: this.state.controls.userName.value,
+        email: this.state.controls.email.value,
+        password: this.state.controls.password.value,
+      };
+      this.setState({ showLoader: true });
+      axios
+        .post('/user/create', data)
+        .then((res) => {
+          if (res.data.data.success) {
+            this.setState({
+              showLoader: false,
+              showMessage: false,
+              isRegister: false,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            showLoader: false,
+            showMessage: true,
+            isRegister: true,
+          });
+        });
+    } else {
+      let data = {
+        email: this.state.controls.email.value,
+        password: this.state.controls.password.value,
+      };
+      this.setState({ showLoader: true });
+      axios
+        .post('/user/login', data)
+        .then((res) => {
+          if (res.data.data.success) {
+            this.setState({
+              showLoader: false,
+              showMessage: false,
+              isRegister: false,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            showLoader: false,
+            showMessage: true,
+            isRegister: true,
+          });
+        });
+    }
+  };
+
+  /**
+   * Changes the from to/from login and register
+   */
+  changeFormHandler = () => {
+    if (this.state.isRegister) {
+      this.setState({ isRegister: false });
+    } else if (!this.state.isRegister) {
+      this.setState({ isRegister: true });
+    }
+  };
+
   render() {
     const formElementsArray = [];
     for (let key in this.state.controls) {
@@ -103,7 +183,7 @@ class Auth extends Component {
         config: this.state.controls[key],
       });
     }
-    const form = formElementsArray.map((formElement) => {
+    const registerForm = formElementsArray.map((formElement) => {
       return (
         <Input
           label={formElement.config.elementConfig.label}
@@ -118,16 +198,43 @@ class Auth extends Component {
         />
       );
     });
+    const loginForm = formElementsArray.slice(1, 3).map((formElement) => {
+      return (
+        <Input
+          label={formElement.config.elementConfig.label}
+          key={formElement.id}
+          elementType={formElement.config.elementType}
+          elementConfig={formElement.config.elementConfig}
+          value={formElement.config.value}
+          invalid={!formElement.config.valid}
+          shouldValidate={formElement.config.validation}
+          touched={formElement.config.touched}
+          changed={(event) => this.inputChangedHandler(event, formElement.id)}
+        />
+      );
+    });
+    const button = (
+      <Button
+        btnType={'Login'}
+        disabled={!this.state.formValid}
+        clicked={(event) => this.submitHandler(event)}
+      >
+        {!this.state.formValid ? 'Disabled' : 'Submit'}
+      </Button>
+    );
     return (
       <div className={classes.Auth}>
         <section className={classes.Header}>
           <Banner>Tasty Coffe Rewards</Banner>
         </section>
         <section className={classes.FormContainer}>
-          <h3>Sign Up</h3>
+          <Button btnType={'General'} clicked={this.changeFormHandler}>
+            Go to {this.state.isRegister ? 'Login' : 'Register'}
+          </Button>
+          <h2>{!this.state.isRegister ? 'Login' : 'Register Now'}</h2>
           <form>
-            {form}
-            <Button btnType={'General'}>Submit</Button>
+            {this.state.isRegister ? registerForm : loginForm}
+            {button}
           </form>
         </section>
       </div>
