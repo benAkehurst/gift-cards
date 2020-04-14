@@ -14,6 +14,7 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
+            <Route path="/" component={Auth}></Route>
             <Route path="/auth" component={Auth}></Route>
             <Route path="/home" component={Home}></Route>
             <Route path="/account" component={Account}></Route>
