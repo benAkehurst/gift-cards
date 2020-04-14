@@ -10,6 +10,11 @@ I also wanted to take this opertunity to learn the React library.
 
 I also learned how to use Sketch to design how the app should look.
 
+## Video Walkthough
+
+Click on the image below to watch a video walkthough of the app!
+[![Explainer Video](https://i.imgur.com/RRnMtd1.png)](https://youtu.be/kBttrjA_vgI 'Gift Card Explainer Video')
+
 ## User Stories
 
 As a user:
@@ -33,11 +38,6 @@ Client Screen 2
 
 Admin Screen
 ![Admin Screen](https://i.imgur.com/Apm6N0y.png)
-
-## Video Walkthough
-
-Click on the image below to watch a video walkthough of the app!
-[![Explainer Video](https://i.imgur.com/RRnMtd1.png)](https://youtu.be/kBttrjA_vgI 'Gift Card Explainer Video')
 
 ## Running the Project
 
