@@ -2,12 +2,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
-const jwt = require('jsonwebtoken');
 
 const User = mongoose.model('User');
-
-let config = require('../../middlewares/config');
-let middleware = require('../../middlewares/middleware');
 
 /**
  * This function gets all the users in the Database
@@ -91,9 +87,6 @@ exports.login_a_user = (req, res) => {
           },
         });
       }
-      let token = jwt.sign({ username: user._id }, config.secret, {
-        expiresIn: '24h', // expires in 24 hours
-      });
       let userFiltered = _.pick(user.toObject(), ['_id', 'isAdmin']);
       res.status(200).json({
         message: 'Successfully logged in',

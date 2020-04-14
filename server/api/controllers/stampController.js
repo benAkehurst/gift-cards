@@ -1,13 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const _ = require('lodash');
-const jwt = require('jsonwebtoken');
 
 const User = mongoose.model('User');
-const Stamp = mongoose.model('Stamp');
-
-let config = require('../../middlewares/config');
 
 /**
  * Function to add a stamp to a user
