@@ -37,7 +37,7 @@ Admin Screen
 ## Video Walkthough
 
 Click on the image below to watch a video walkthough of the app!
-[![Everything Is AWESOME](http://i.imgur.com/Ot5DWAW.png)](https://youtu.be/StTqXEQ2l-Y?t=35s 'Everything Is AWESOME')
+[![Explainer Video](https://i.imgur.com/RRnMtd1.png)](https://youtu.be/kBttrjA_vgI 'Gift Card Explainer Video')
 
 ## Running the Project
 
