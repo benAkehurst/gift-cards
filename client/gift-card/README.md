@@ -19,7 +19,7 @@ There are 4 different routes in the app:
 3. Account - As a user, this is where you can see your past transactions
 4. Admin - As an admin, you can use this page to add stamps to a user.
 
-## Storybook
+##  Storybook
 
 This project also utalises Storybook to document all the atom components that are being used in the app. This way you can see what each component does indipendently of the container that uses it.
 
