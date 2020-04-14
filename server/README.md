@@ -1,5 +1,7 @@
 # Gift Card Node.js API server
 
+I adapted this server from my [Boilerplate api project](https://github.com/benAkehurst/nodejs-api-server).
+
 ## Start the server with nodemon: `nodemon start server.js`
 
 ## User Endpoints
