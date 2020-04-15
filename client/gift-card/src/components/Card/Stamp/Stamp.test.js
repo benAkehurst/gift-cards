@@ -7,13 +7,18 @@ configure({ adapter: new Adapter() });
 import Stamp from './Stamp';
 
 describe('<Stamp />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<Stamp />);
+  });
+
   it('should render the compoent', () => {
-    const wrapper = shallow(<Stamp />);
     expect(wrapper).toBeTruthy();
   });
 
   it('should render a stamp if it exists', () => {
-    const wrapper = shallow(<Stamp hasStamp={true} />);
+    wrapper.setProps({ hasStamp: true });
     expect(wrapper).toBeTruthy();
   });
 });

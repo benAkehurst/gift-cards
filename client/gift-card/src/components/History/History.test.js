@@ -7,25 +7,28 @@ configure({ adapter: new Adapter() });
 import History from './History';
 
 describe('<Stamp />', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<History />);
+  });
+
   it('should render the compoent', () => {
-    const wrapper = shallow(<History />);
     expect(wrapper).toBeTruthy();
   });
 
   it('should render a list of items', () => {
-    const wrapper = shallow(
-      <History
-        historyData={[
-          { id: 1, name: 'a' },
-          { id: 2, name: 'b' },
-        ]}
-      />
-    );
+    wrapper.setProps({
+      historyData: [
+        { id: 1, name: 'a' },
+        { id: 2, name: 'b' },
+      ],
+    });
     expect(wrapper).toBeTruthy();
   });
 
   it('should render a title', () => {
-    const wrapper = shallow(<History title={'test title'} />);
+    wrapper.setProps({ title: 'a title' });
     expect(wrapper).toBeTruthy();
   });
 });
