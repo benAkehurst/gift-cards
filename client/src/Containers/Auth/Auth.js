@@ -12,6 +12,7 @@ import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
 import Spinner from '../../components/UI/Spinner/Spinner';
+
 class Auth extends Component {
   state = {
     controls: {

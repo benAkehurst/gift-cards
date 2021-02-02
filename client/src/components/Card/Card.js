@@ -1,9 +1,8 @@
 import React from 'react';
 import './Card.scss';
+import * as AppConfig from '../../config/AppConfig';
 
 import Stamp from './Stamp/Stamp';
-import { completeOfferText } from '../../Helpers/offers';
-import { tooManyStamps } from '../../Helpers/errors';
 
 const Card = (props) => {
   // Method to render stamps that exist
@@ -36,8 +35,8 @@ const Card = (props) => {
     <div className="Card">
       <div className="StampContainer">
         {allStamps}
-        {props.currentStamps === 10 ? completeOfferText() : null}
-        {props.currentStamps > 10 ? tooManyStamps() : null}
+        {props.currentStamps === 10 ? AppConfig.COMPLETED_OFFER : null}
+        {props.currentStamps > 10 ? AppConfig.TO_MANY_STAMPS : null}
       </div>
     </div>
   );
