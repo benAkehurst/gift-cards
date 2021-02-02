@@ -1,25 +1,25 @@
 import React from 'react';
-import classes from './Input.module.css';
+import './Input.scss';
 
 const input = (props) => {
   let inputElement = null;
   let validationError = null;
-  const inputClasses = [classes.InputElement];
+  const inputClasses = ['InputElement'];
 
   if (props.invalid && props.shouldValidate && props.touched) {
-    inputClasses.push(classes.Invalid);
+    inputClasses.push('Invalid');
   }
   if (props.invalid && props.touched) {
     validationError = null;
     if (props.elementConfig.label === 'Password') {
       validationError = (
-        <p className={classes.ValidationError}>
+        <p className="ValidationError">
           Please enter a valid password with minimum of 6 characters
         </p>
       );
     } else {
       validationError = (
-        <p className={classes.ValidationError}>
+        <p className="ValidationError">
           Please enter a valid {props.elementConfig.label}
         </p>
       );
@@ -77,8 +77,8 @@ const input = (props) => {
   }
 
   return (
-    <div className={classes.Input}>
-      <label className={classes.Label}>{props.label}</label>
+    <div className="Input">
+      <label className="Label">{props.label}</label>
       {inputElement}
       {validationError}
     </div>

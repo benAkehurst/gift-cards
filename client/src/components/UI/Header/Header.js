@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Header.module.css';
+import './Header.scss';
 
 import { getTimeOfDay } from '../../../Helpers/timeAndDate';
 
@@ -11,7 +11,7 @@ class Header extends Component {
 
   render() {
     return (
-      <header className={classes.Header}>
+      <header className="Header">
         Good {getTimeOfDay()} {this.props.userName}!
       </header>
     );

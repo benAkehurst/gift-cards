@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Auth.module.css';
+import './Auth.scss';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import {
@@ -254,11 +254,11 @@ class Auth extends Component {
       </Button>
     );
     return (
-      <div className={classes.Auth}>
-        <section className={classes.Header}>
+      <div className="Auth">
+        <section className="Header">
           <Banner>Tasty Coffe Rewards</Banner>
         </section>
-        <section className={classes.FormContainer}>
+        <section className="FormContainer">
           <Button btnType={'General'} clicked={this.changeFormHandler}>
             Go to {this.state.isRegister ? 'Login' : 'Register'}
           </Button>

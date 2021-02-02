@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Admin.module.css';
+import './Admin.scss';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
@@ -111,13 +111,13 @@ class Admin extends Component {
     );
     const completed = <Banner>Stamps added successfully</Banner>;
     return (
-      <div className={classes.Admin}>
-        <section className={classes.Header}>
+      <div className="Admin">
+        <section className="Header">
           <Banner>Tasty Coffe Rewards</Banner>
           <h2>Admin Page</h2>
           <h3>Add stamps below:</h3>
         </section>
-        <section className={classes.FormContainer}>
+        <section className="FormContainer">
           {form}
           {button}
         </section>

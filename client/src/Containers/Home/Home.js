@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Home.module.css';
+import './Home.scss';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
@@ -58,15 +58,15 @@ class Home extends Component {
 
   render() {
     return (
-      <div className={classes.Home}>
-        <section className={classes.Header}>
+      <div className="Home">
+        <section className="Header">
           <Banner>Tasty Coffe Rewards</Banner>
           <Header userName={this.state.name}></Header>
-          <section className={classes.Card}>
+          <section className="Card">
             <Card currentStamps={this.state.currentStamps}></Card>
           </section>
         </section>
-        <section className={classes.Controls}>
+        <section className="Controls">
           <InfoDisplay dispStr={this.state.appId}></InfoDisplay>
           <Button
             btnType={'General'}

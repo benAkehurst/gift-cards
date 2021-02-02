@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import classes from './Layout.module.css';
+import './Layout.scss';
 import Aux from '../Aux/Aux';
 class Layout extends Component {
   render() {
     return (
       <Aux>
-        <main className={classes.Layout}>{this.props.children}</main>
+        <main className="Layout">{this.props.children}</main>
       </Aux>
     );
   }

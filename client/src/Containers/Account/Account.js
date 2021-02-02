@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Account.module.css';
+import './Account.scss';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
@@ -24,11 +24,11 @@ class Account extends Component {
 
   render() {
     return (
-      <div className={classes.Account}>
-        <section className={classes.Header}>
-          <Banner>Tasty Coffe Rewards</Banner>
+      <div className="Account">
+        <section className="Header">
+          <Banner>Tasty Coffee Rewards</Banner>
         </section>
-        <section className={classes.HistoryContainer}>
+        <section className="HistoryContainer">
           <History
             historyData={this.props.location.state.transactions}
             title={'Stamps'}
@@ -41,7 +41,7 @@ class Account extends Component {
             display={'completed'}
           />{' '}
         </section>
-        <section className={classes.Controls}>
+        <section className="Controls">
           <InfoDisplay dispStr={this.props.location.state.appId}></InfoDisplay>
           <Button btnType={'General'} clicked={this.goBackHandler}>
             Back

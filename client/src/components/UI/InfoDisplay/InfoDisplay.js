@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './InfoDisplay.module.css';
+import './InfoDisplay.scss';
 
 class InfoDisplay extends Component {
   /**
@@ -12,7 +12,7 @@ class InfoDisplay extends Component {
     if (this.props.dispStr) {
       appId = this.props.dispStr.substr(1);
     }
-    return <p className={classes.InfoDispalay}>ID - {appId}</p>;
+    return <p className="InfoDisplay">ID - {appId}</p>;
   }
 }
 

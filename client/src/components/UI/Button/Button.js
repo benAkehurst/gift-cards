@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Button.module.css';
+import './Button.scss';
 
 class Button extends Component {
   /**
@@ -13,7 +13,7 @@ class Button extends Component {
     return (
       <button
         disabled={this.props.disabled}
-        className={[classes.Button, classes[this.props.btnType]].join(' ')}
+        className={['Button', [this.props.btnType]].join(' ')}
         onClick={this.props.clicked}
       >
         {this.props.children}

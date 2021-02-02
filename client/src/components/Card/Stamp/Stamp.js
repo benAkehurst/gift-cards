@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Stamp.module.css';
+import './Stamp.scss';
 
 import Logo from '../../Logo/Logo';
 
@@ -8,12 +8,12 @@ class Stamp extends Component {
     let hasStamp = false;
     if (this.props.hasStamp) {
       hasStamp = (
-        <div className={classes.ShowStamp}>
+        <div className="ShowStamp">
           <Logo />
         </div>
       );
     }
-    return <div className={classes.Stamp}>{hasStamp}</div>;
+    return <div className="Stamp">{hasStamp}</div>;
   }
 }
 

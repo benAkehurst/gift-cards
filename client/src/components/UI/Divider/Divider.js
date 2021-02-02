@@ -1,8 +1,8 @@
 import React from 'react';
-import classes from './Divider.module.css';
+import './Divider.scss';
 
 const divider = (props) => (
-  <div className={[classes.Divider, classes[props.size]].join(' ')}></div>
+  <div className={['Divider', [props.size]].join(' ')}></div>
 );
 
 export default divider;

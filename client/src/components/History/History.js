@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './History.module.css';
+import './History.scss';
 
 import { dateFormatter } from '../../Helpers/timeAndDate';
 
@@ -49,7 +49,7 @@ class History extends Component {
     }
 
     return (
-      <div className={classes.History}>
+      <div className="History">
         <p>{this.props.title}</p>
         <ul>{itemsList}</ul>
       </div>

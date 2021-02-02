@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Spinner.module.css';
+import './Spinner.scss';
 
 class Spinner extends Component {
   /**
@@ -9,9 +9,7 @@ class Spinner extends Component {
 
   render() {
     return (
-      <div className={[classes.Spinner, classes[this.props.size]].join(' ')}>
-        Loading...
-      </div>
+      <div className={['Spinner', [this.props.size]].join(' ')}>Loading...</div>
     );
   }
 }

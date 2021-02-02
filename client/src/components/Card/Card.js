@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './Card.module.css';
+import './Card.scss';
 
 import { completeOfferText } from '../../Helpers/offers';
 import { tooManyStamps } from '../../Helpers/errors';
@@ -36,8 +36,8 @@ class Card extends Component {
       allStamps.push(hasStamps, stamps);
     }
     return (
-      <div className={classes.Card}>
-        <div className={classes.StampContianer}>
+      <div className="Card">
+        <div className="StampContainer">
           {allStamps}
           {this.props.currentStamps === 10 ? completeOfferText() : null}
           {this.props.currentStamps > 10 ? tooManyStamps() : null}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import classes from './Banner.module.css';
+import './Banner.scss';
 
 class Banner extends Component {
   render() {
-    return <div className={classes.Banner}>{this.props.children}</div>;
+    return <div className="Banner">{this.props.children}</div>;
   }
 }
 
