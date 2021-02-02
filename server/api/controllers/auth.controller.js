@@ -8,8 +8,8 @@ const sanitize = require('mongo-sanitize');
 const {
   checkEmailExists,
   validateEmail,
+  checkToken,
 } = require('../../middlewares/validators');
-const { checkToken } = require('../../middlewares/token');
 const { sendEmail } = require('../../middlewares/utils/emailService');
 const User = require('../models/user.model');
 const Code = require('../models/code.model');
