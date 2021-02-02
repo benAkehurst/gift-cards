@@ -1,9 +1,11 @@
+@import '../../../variables.scss';
+
 .Header {
   width: 100vw;
-  height: 3rem;
+  height: $spacing-48;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: $font-size-01;
 }

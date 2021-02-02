@@ -1,13 +1,15 @@
+@import '../../../variables.scss';
+
 .Input {
   width: 100%;
-  padding: 10px;
+  padding: $spacing-8;
   box-sizing: border-box;
 }
 
 .Label {
   font-weight: bold;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: $spacing-8;
 }
 
 .InputElement {
@@ -15,7 +17,7 @@
   border: 1px solid #ccc;
   background-color: white;
   font: inherit;
-  padding: 0.5rem 10px;
+  padding: $spacing-8 $spacing-8;
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -27,11 +29,11 @@
 }
 
 .Invalid {
-  border: 1px solid red;
+  border: 1px solid $error;
   background-color: #fda49a;
 }
 
 .ValidationError {
-  color: red;
+  color: $error;
   margin: 5px 0;
 }

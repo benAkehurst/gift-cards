@@ -1,8 +1,10 @@
+@import '../../../variables.scss';
+
 .Divider {
   width: 75vw;
   border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.3);
-  margin: 0.5rem;
+  margin: $spacing-8;
 }
 
 .small {

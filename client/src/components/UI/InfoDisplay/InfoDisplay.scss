@@ -1,5 +1,7 @@
+@import '../../../variables.scss';
+
 .InfoDisplay {
-  font-size: 2.5rem;
+  font-size: $font-size-03;
   font-weight: bold;
   margin: 0;
 }

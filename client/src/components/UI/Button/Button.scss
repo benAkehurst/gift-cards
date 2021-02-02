@@ -1,15 +1,17 @@
+@import '../../../variables.scss';
+
 .Button {
-  width: 10rem;
-  height: 2rem;
-  border-radius: 0.5rem;
+  width: $spacing-128;
+  height: $spacing-32;
+  border-radius: $border-radius-03;
   background-color: transparent;
   border: none;
   color: white;
   outline: none;
   cursor: pointer;
   font: inherit;
-  padding: 1rem;
-  margin: 0.5rem;
+  padding: $spacing-16;
+  margin: $spacing-8;
   font-weight: bold;
   display: flex;
   flex-direction: column;
@@ -24,7 +26,7 @@
 }
 
 .Login {
-  background-color: #7ce44d;
+  background-color: $success;
   color: #fff;
 }
 

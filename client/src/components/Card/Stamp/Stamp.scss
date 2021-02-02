@@ -1,8 +1,10 @@
+@import '../../../variables.scss';
+
 .Stamp {
-  width: 4rem;
-  height: 4rem;
+  width: $spacing-64;
+  height: $spacing-64;
   background-color: white;
-  border-radius: 0.5rem;
+  border-radius: $border-radius-03;
   border: 1px solid #979797;
   margin: 0 2px;
   display: flex;
@@ -12,7 +14,7 @@
 }
 
 .ShowStamp {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+  width: $spacing-48;
+  height: $spacing-48;
+  border-radius: $border-radius-03;
 }
