@@ -10,6 +10,7 @@ import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Error from '../../components/UI/Error/Error';
 import Card from '../../components/Card/Card';
 
 const Home = (props) => {
@@ -60,7 +61,7 @@ const Home = (props) => {
   return (
     <div className="Home">
       {isLoading && <Spinner size="large"></Spinner>}
-      {isError && <p>Something went wrong...</p>}
+      {isError && <Error errorText="Something went wrong..." />}
       <section className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
         <Header userName={name}></Header>
