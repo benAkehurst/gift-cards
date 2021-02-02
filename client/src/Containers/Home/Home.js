@@ -9,6 +9,7 @@ import Header from '../../components/UI/Header/Header';
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import Card from '../../components/Card/Card';
 
 const Home = (props) => {
@@ -25,6 +26,7 @@ const Home = (props) => {
     if (!_id) {
       props.history.push({ pathname: '/auth' });
     }
+    setIsLoading(true);
     axios
       .get(`/user/${_id}`)
       .then((res) => {
@@ -57,12 +59,14 @@ const Home = (props) => {
 
   return (
     <div className="Home">
+      {isLoading && <Spinner size="large"></Spinner>}
+      {isError && <p>Something went wrong...</p>}
       <section className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
         <Header userName={name}></Header>
-        <section className="Card">
-          <Card currentStamps={currentStamps}></Card>
-        </section>
+      </section>
+      <section className="Card">
+        <Card currentStamps={currentStamps}></Card>
       </section>
       <section className="Controls">
         <InfoDisplay dispStr={appId}></InfoDisplay>
