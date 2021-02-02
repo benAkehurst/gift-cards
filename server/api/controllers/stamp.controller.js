@@ -1,95 +1,59 @@
 'use strict';
 const mongoose = require('mongoose');
-
+const { format } = require('date-fns');
 const User = mongoose.model('User');
 
 /**
- * Function to add a stamp to a user
+ * Method to add stamp to user
+ * GET
+ * Params - /:customerId/:numberOfStamps:
  */
-exports.add_stamp = (req, res) => {
-  let requester = req.body._id;
-  let customerId = req.body.customerId;
-  let stampCountToAdd = parseInt(req.body.stampsToAdd);
-  User.findOne({ _id: requester }, (err, user) => {
-    /**
-     * Checks if user is an admin.
-     * If false, error returned to user.
-     */
-    if (!user.isAdmin) {
-      return res.status(401).json({
+exports.add_stamp = async (req, res) => {
+  const { customerId, numberOfStamps } = req.params;
+  try {
+    const user = await User.findOne({ customerId: customerId });
+    if (!user) {
+      res.status(401).json({
         success: false,
-        title: 'Stamping failed',
-        error: {
-          error: err,
-          message: 'User not valid',
-        },
+        message: 'Failed to find user',
       });
-    }
-    /**
-     * Finds user to add stamps to in db
-     */
-    User.findOne({ customerId: customerId }, (err, user) => {
-      if (!user) {
-        return res.status(500).json({
-          success: false,
-          title: 'Error finding user to add stamp to',
-          error: err,
-        });
-      }
+    } else {
       let currentStamps = parseInt(user.current_stamps);
       if (currentStamps < 10) {
-        let newTotal = currentStamps + stampCountToAdd;
+        let newTotal = currentStamps + parseInt(numberOfStamps);
         if (newTotal < 10) {
-          /**
-           * Updates the stamps amount
-           */
-          User.updateOne(
+          // Updates the stamps amount
+          // Updates the transactions array
+          User.findOneAndUpdate(
             { customerId: customerId },
-            { $set: { current_stamps: newTotal } },
             {
+              $set: { current_stamps: newTotal },
               $push: {
                 transactions: {
-                  stamp_count: stampCountToAdd,
-                  created_date: new Date(),
+                  stamp_count: parseInt(numberOfStamps),
+                  created_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
-            (err, done) => {
+            { new: true },
+            (err, user) => {
               if (err) {
-                return res.status(500).json({
+                res.status(401).json({
                   success: false,
-                  title: 'Error adding stamp',
+                  title: 'Failed to add Stamp and update transactions array',
+                  data: null,
                 });
               }
-            }
-          );
-          /**
-           * Updates the transaction array
-           */
-          User.updateOne(
-            { customerId: customerId },
-            {
-              $push: {
-                transactions: {
-                  stamp_count: stampCountToAdd,
-                  created_date: new Date(),
+              res.status(200).json({
+                success: true,
+                title: 'Stamp added',
+                data: {
+                  current_stamps: user.current_stamps,
+                  transactions: user.transactions,
                 },
-              },
-            },
-            (err, done) => {
-              if (err) {
-                return res.status(500).json({
-                  success: false,
-                  title: 'Error adding transaction',
-                });
-              }
+              });
             }
           );
-          return res.status(200).json({
-            success: true,
-            title: 'Stamp added',
-            data: {},
-          });
         }
         if (newTotal === 10) {
           /**
@@ -100,8 +64,8 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 transactions: {
-                  stamp_count: stampCountToAdd,
-                  created_date: new Date(),
+                  stamp_count: parseInt(numberOfStamps),
+                  created_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
@@ -122,7 +86,7 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 completed_cards: {
-                  completed_date: new Date(),
+                  completed_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
@@ -182,7 +146,7 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 completed_cards: {
-                  completed_date: new Date(),
+                  completed_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
@@ -203,8 +167,8 @@ exports.add_stamp = (req, res) => {
             {
               $push: {
                 transactions: {
-                  stamp_count: stampCountToAdd,
-                  created_date: new Date(),
+                  stamp_count: parseInt(numberOfStamps),
+                  created_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
@@ -232,6 +196,13 @@ exports.add_stamp = (req, res) => {
           data: {},
         });
       }
+    }
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message:
+        'General error adding stamp to user - Error on /api/v1/stamps/add-stamp/:customerId/:numberOfStamps',
+      data: err,
     });
-  });
+  }
 };
