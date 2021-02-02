@@ -6,7 +6,7 @@ const User = mongoose.model('User');
 
 /**
  * Method to add stamp to user
- * GET
+ * POST
  * Params - /:customerId/:numberOfStamps/:token
  */
 exports.add_stamp = async (req, res) => {
@@ -114,77 +114,48 @@ exports.add_stamp = async (req, res) => {
             );
           }
           if (newTotal > 10) {
-            /**
-             * Reset current_stamps to number past 10 - new total
-             */
-            User.updateOne(
-              { customerId: customerId },
-              { $set: { current_stamps: newTotal - 10 } },
-              (err, done) => {
-                if (err) {
-                  return res.status(500).json({
-                    success: false,
-                    title: 'Error reseting stamps new total',
-                  });
-                }
-              }
-            );
-            /**
-             * Updates the completed card array
-             */
-            User.updateOne(
+            // Updates the stamps amount
+            // Updates the transactions array
+            // Updates the completed cards array
+            User.findOneAndUpdate(
               { customerId: customerId },
               {
+                $set: { current_stamps: newTotal - 10 },
                 $push: {
                   completed_cards: {
                     completed_date: format(new Date(), 'dd/MM/yyyy'),
                   },
-                },
-              },
-              (err, done) => {
-                if (err) {
-                  return res.status(500).json({
-                    success: false,
-                    title: 'Error adding completed card array',
-                  });
-                }
-              }
-            );
-            /**
-             * Updates the transaction array
-             */
-            User.updateOne(
-              { customerId: customerId },
-              {
-                $push: {
                   transactions: {
                     stamp_count: parseInt(numberOfStamps),
                     created_date: format(new Date(), 'dd/MM/yyyy'),
                   },
                 },
               },
-              (err, done) => {
+              { new: true },
+              (err, user) => {
                 if (err) {
-                  return res.status(500).json({
+                  res.status(401).json({
                     success: false,
-                    title: 'Error adding transaction',
+                    title:
+                      'Failed to add Stamp and update transactions array for 10 stamps',
+                    data: null,
                   });
                 }
+                res.status(200).json({
+                  success: true,
+                  message: 'Stamp added',
+                  data: {
+                    current_stamps: user.current_stamps,
+                    msg: 'User has freebie...',
+                  },
+                });
               }
             );
-            return res.status(200).json({
-              success: true,
-              title: 'Stamp added',
-              data: {
-                msg: 'User has freebie...',
-              },
-            });
           }
-        } else {
-          return res.status(500).json({
+        } else if (currentStamps > 10) {
+          res.status(401).json({
             success: false,
-            title: 'Stamp count not valid',
-            data: null,
+            message: 'To many stamps - something went wrong',
           });
         }
       }
