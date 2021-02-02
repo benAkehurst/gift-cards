@@ -1,12 +1,14 @@
+@import '../../variables.scss';
+
 .Card {
-  width: 16rem;
-  height: 21rem;
-  padding: 1rem;
+  width: $card-width;
+  height: $card-height;
+  padding: $spacing-16;
   box-sizing: border-box;
   background-color: #a8b9bd;
   border: 1px solid #7c8486;
-  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
+  box-shadow: $shadow-02;
+  border-radius: $border-radius-03;
 }
 
 .StampContainer {
@@ -16,6 +18,6 @@
   flex-wrap: wrap;
   justify-content: center;
   align-content: space-around;
-  font-size: 1.5rem;
+  font-size: $font-size-02;
   text-align: center;
 }
