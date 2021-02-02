@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.scss';
 import axios from '../../axios-connector';
+import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
 
@@ -57,7 +58,7 @@ const Home = (props) => {
   return (
     <div className="Home">
       <section className="Header">
-        <Banner>Tasty Coffee Rewards</Banner>
+        <Banner>{AppConfig.APP_NAME}</Banner>
         <Header userName={name}></Header>
         <section className="Card">
           <Card currentStamps={currentStamps}></Card>
