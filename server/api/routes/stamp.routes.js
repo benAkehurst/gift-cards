@@ -6,6 +6,6 @@ module.exports = (app) => {
    * Stamp Routes
    */
   app
-    .route('/api/v1/stamps/add-stamp/:customerId/:numberOfStamps')
-    .get(stampController.add_stamp);
+    .route('/api/v1/stamps/add-stamp/:customerId/:numberOfStamps/:token')
+    .post(stampController.add_stamp);
 };
