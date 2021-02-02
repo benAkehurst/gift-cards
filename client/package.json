@@ -20,6 +20,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "reset": "rm -rf node_modules",
+    "reinstall": "rm -rf node_modules && npm i",
+    "security:fix": "npm audit fix",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
