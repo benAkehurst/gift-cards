@@ -1,0 +1,12 @@
+@import '../../variables.scss';
+
+.Logo {
+  background-color: rgba(175, 88, 88, 0.2);
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: $border-radius-03;
+}
+
+.Logo img {
+  height: 100%;
+}

@@ -1,0 +1,37 @@
+@import '../../../variables.scss';
+
+.Button {
+  width: $spacing-128;
+  height: $spacing-32;
+  border-radius: $border-radius-03;
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: $spacing-16;
+  margin: $spacing-8;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 20px 6px #bcbcbc;
+}
+
+.General {
+  background-color: #a79280;
+  color: #fff;
+}
+
+.Login {
+  background-color: $success;
+  color: #fff;
+}
+
+.Button:disabled {
+  color: #ccc;
+  background-color: #ddd;
+  cursor: not-allowed;
+}

@@ -1,0 +1,19 @@
+@import '../../variables.scss';
+
+.History {
+  font-size: $font-size-01;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+  max-height: 40%;
+}
+
+.History ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+.History li {
+  margin: $spacing-16 0;
+}

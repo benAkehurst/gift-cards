@@ -1,0 +1,119 @@
+/* App Colors */
+$primary-color: #588157;
+$secondary-color: #a3b18a;
+$bg-white: #fff;
+$off-white: #dad7cd;
+$subheader: #3a5a40;
+$highlight: #344e41;
+$success: lightgreen;
+$error: crimson;
+
+/* Card Variables */
+$card-width: 16rem;
+$card-height: 21rem;
+
+/* App Spacing */
+$spacing-1: 0.0625rem;
+$spacing-4: 0.25rem;
+$spacing-8: 0.5rem;
+$spacing-16: 1rem;
+$spacing-24: 1.5rem;
+$spacing-32: 2rem;
+$spacing-40: 2.5rem;
+$spacing-48: 3rem;
+$spacing-56: 3.5rem;
+$spacing-64: 4rem;
+$spacing-72: 4.5rem;
+$spacing-80: 5rem;
+$spacing-88: 5.5rem;
+$spacing-96: 6rem;
+$spacing-104: 6.5rem;
+$spacing-112: 7rem;
+$spacing-120: 7.5rem;
+$spacing-128: 8rem;
+
+/* App Widths */
+$width-10: 10%;
+$width-20: 20%;
+$width-30: 30%;
+$width-40: 40%;
+$width-50: 50%;
+$width-60: 60%;
+$width-70: 70%;
+$width-80: 80%;
+$width-85: 85%;
+$width-90: 90%;
+$width-95: 95%;
+$width-100: 100%;
+
+/* border-radius */
+$border-radius: 0.0625rem;
+$border-radius-input: 5px;
+$border-radius-01: 0.125rem;
+$border-radius-02: 0.25rem;
+$border-radius-03: 0.5rem;
+$border-radius-04: 1rem;
+$border-radius-05: 100%;
+
+/* border-width */
+$border-width: 0.0625rem;
+$border-width-01: 0.0625rem;
+$border-width-02: 0.125rem;
+$border-width-03: 0.25rem;
+$border-width-04: 0.375rem;
+
+/* breakpoints; small, medium, large, x-large, max */
+$break-point-01: 320px;
+$break-point-02: 627px;
+$break-point-03: 1056px;
+$break-point-04: 1312px;
+$break-point-05: 1584px;
+
+/* button */
+$button-border-radius: 5px;
+$button-border-radius-15: 1rem;
+$button-border-radius-18: 1.125rem;
+$button-border-radius-26: 1.625rem;
+$button-s: 1.5rem;
+$button-m: 2rem;
+$button-l: 3rem;
+
+/* grid column max width; small, medium, large, x-large, max */
+$col-container-width-01: 20rem;
+$col-container-width-02: 42rem;
+$col-container-width-03: 66rem;
+$col-container-width-04: 82rem;
+$col-container-width-05: 99rem;
+
+/* grid column margin; small, medium & large & x-large, max */
+$col-margin-01: 0;
+$col-margin-02: 1rem;
+$col-margin-03: 1.5rem;
+
+/* grid column padding; same for all sizes */
+$col-padding-01: 1rem;
+
+/* grid column width; small, medium, large, x-large & max are the same */
+$col-width-01: 25%;
+$col-width-02: 12.5%;
+$col-width-03: 6.2%;
+$col-width-04: 6.25%;
+
+/* font sizes */
+$font-size-00: 0.5rem;
+$font-size-01: 1rem;
+$font-size-02: 1.5rem;
+$font-size-03: 2rem;
+
+/* font weights */
+$font-weight-01: 300;
+$font-weight-02: 400;
+$font-weight-03: 700;
+$font-weight-04: 900;
+
+/* shadow */
+$shadow-01: 0 0.0625rem 4px 0 rgba(0, 0, 0, 0.1);
+$shadow-02: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+$shadow-03: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
+$shadow-04: 0 12px 24px 0 rgba(0, 0, 0, 0.1);
+$shadow-05: -6px -6px 8px 0 rgba(0, 0, 0, 0.1);
