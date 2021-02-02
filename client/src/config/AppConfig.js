@@ -1,5 +1,6 @@
 /**
  * This file is where you can set the app name and any boilerplate messages for the user
+ * TODO: Generate/populate this file and the strings from the db to allow an admin to update the messages
  */
 
 export const APP_NAME = 'Cool Coffee Shop';

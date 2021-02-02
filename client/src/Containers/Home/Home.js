@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import './Home.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
@@ -62,14 +62,14 @@ const Home = (props) => {
     <div className="Home">
       {isLoading && <Spinner size="large"></Spinner>}
       {isError && <Error errorText="Something went wrong..." />}
-      <section className="Header">
+      <Fragment className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
         <Header userName={name}></Header>
-      </section>
-      <section className="Card">
+      </Fragment>
+      <Fragment>
         <Card currentStamps={currentStamps}></Card>
-      </section>
-      <section className="Controls">
+      </Fragment>
+      <Fragment className="Controls">
         <InfoDisplay dispStr={appId}></InfoDisplay>
         <Button
           btnType={'General'}
@@ -77,7 +77,7 @@ const Home = (props) => {
         >
           Account
         </Button>
-      </section>
+      </Fragment>
     </div>
   );
 };
