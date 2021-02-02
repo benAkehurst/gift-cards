@@ -5,16 +5,15 @@
   border: 1px solid black;
   background-color: rgba(0, 0, 0, 0.3);
   margin: $spacing-8;
-}
+  .small {
+    height: 0.1rem;
+  }
 
-.small {
-  height: 0.1rem;
-}
+  .medium {
+    height: 0.2rem;
+  }
 
-.medium {
-  height: 0.2rem;
-}
-
-.large {
-  height: 0.3rem;
+  .large {
+    height: 0.3rem;
+  }
 }
