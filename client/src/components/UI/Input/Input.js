@@ -1,7 +1,7 @@
 import React from 'react';
 import './Input.scss';
 
-const input = (props) => {
+const Input = (props) => {
   let inputElement = null;
   let validationError = null;
   const inputClasses = ['InputElement'];
@@ -85,4 +85,4 @@ const input = (props) => {
   );
 };
 
-export default input;
+export default Input;

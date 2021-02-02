@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Banner.scss';
 
-class Banner extends Component {
-  render() {
-    return <div className="Banner">{this.props.children}</div>;
-  }
-}
+const Banner = (props) => <div className="Banner">{props.children}</div>;
 
 export default Banner;

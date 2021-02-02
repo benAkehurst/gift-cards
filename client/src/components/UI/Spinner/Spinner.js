@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Spinner.scss';
 
-class Spinner extends Component {
-  /**
-   * Props:
-   * size - MANDATORY PROP: 'small', 'medium' or 'large'
-   */
+/**
+ * Props:
+ * size - MANDATORY PROP: 'small', 'medium' or 'large'
+ */
 
-  render() {
-    return (
-      <div className={['Spinner', [this.props.size]].join(' ')}>Loading...</div>
-    );
-  }
-}
+const Spinner = (props) => (
+  <div className={['Spinner', [props.size]].join(' ')}>Loading...</div>
+);
 
 export default Spinner;
