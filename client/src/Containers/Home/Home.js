@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.scss';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
@@ -10,74 +10,70 @@ import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import Card from '../../components/Card/Card';
 
-class Home extends Component {
-  state = {
-    name: null,
-    currentStamps: 0,
-    completedCards: null,
-    transactions: null,
-    appId: null,
-    isLoading: false,
-  };
+const Home = (props) => {
+  const [name, setName] = useState(null);
+  const [currentStamps, setCurrentStamps] = useState(0);
+  const [completedCards, setCompletedCards] = useState(null);
+  const [transactions, setTransactions] = useState(null);
+  const [appId, setAppId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  componentDidMount() {
+  useEffect(() => {
     const _id = getUserId();
     if (!_id) {
-      this.props.history.push({ pathname: '/auth' });
+      props.history.push({ pathname: '/auth' });
     }
     axios
       .get(`/user/${_id}`)
       .then((res) => {
         if (res.data.data) {
-          this.setState({
-            name: res.data.data.name,
-            currentStamps: res.data.data.current_stamps,
-            completedCards: res.data.data.completed_cards,
-            transactions: res.data.data.transactions,
-            appId: res.data.data.customerId,
-            isLoading: false,
-          });
+          setName(res.data.data.name);
+          setCurrentStamps(res.data.data.current_stamps);
+          setCompletedCards(res.data.data.completed_cards);
+          setTransactions(res.data.data.transactions);
+          setAppId(res.data.data.customerId);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
-        this.setState({ error: true, isLoading: false });
+        setIsLoading(false);
+        setIsError(false);
         console.log(err);
       });
-  }
+  }, []);
 
-  goToAccountHandler = (link) => {
-    this.props.history.push({
+  const goToAccountHandler = (link) => {
+    props.history.push({
       pathname: `/${link}`,
       state: {
-        completedCards: this.state.completedCards,
-        transactions: this.state.transactions,
-        appId: this.state.appId,
+        completedCards: completedCards,
+        transactions: transactions,
+        appId: appId,
       },
     });
   };
 
-  render() {
-    return (
-      <div className="Home">
-        <section className="Header">
-          <Banner>Tasty Coffe Rewards</Banner>
-          <Header userName={this.state.name}></Header>
-          <section className="Card">
-            <Card currentStamps={this.state.currentStamps}></Card>
-          </section>
+  return (
+    <div className="Home">
+      <section className="Header">
+        <Banner>Tasty Coffee Rewards</Banner>
+        <Header userName={name}></Header>
+        <section className="Card">
+          <Card currentStamps={currentStamps}></Card>
         </section>
-        <section className="Controls">
-          <InfoDisplay dispStr={this.state.appId}></InfoDisplay>
-          <Button
-            btnType={'General'}
-            clicked={() => this.goToAccountHandler('account')}
-          >
-            Account
-          </Button>
-        </section>
-      </div>
-    );
-  }
-}
+      </section>
+      <section className="Controls">
+        <InfoDisplay dispStr={appId}></InfoDisplay>
+        <Button
+          btnType={'General'}
+          clicked={() => goToAccountHandler('account')}
+        >
+          Account
+        </Button>
+      </section>
+    </div>
+  );
+};
 
 export default withErrorHandler(Home, axios);
