@@ -1,4 +1,4 @@
-const User = require('../api/models/userModel');
+const User = require('../api/models/user.model');
 
 /**
  * isValidEmail helper method

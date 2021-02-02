@@ -9,8 +9,9 @@ const winston = require('./config/winston');
 const helmet = require('helmet');
 
 // Models Imports
-const User = require('./api/models/userModel');
-const Stamp = require('./api/models/stampModel');
+const User = require('./api/models/user.model');
+const Stamp = require('./api/models/stamp.model');
+const Code = require('./api/models/code.model');
 
 // Init Express
 const app = express();
@@ -64,8 +65,10 @@ app.use((req, res, next) => {
 app.use(cors());
 
 // Routes Definitions
-const userRoutes = require('./api/routes/userRoutes');
-const stampRoutes = require('./api/routes/stampRoutes');
+const authRoutes = require('./api/routes/auth.routes');
+const userRoutes = require('./api/routes/user.routes');
+const stampRoutes = require('./api/routes/stamp.routes');
+authRoutes(app);
 userRoutes(app);
 stampRoutes(app);
 
