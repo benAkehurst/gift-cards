@@ -22,13 +22,13 @@ mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
   },
-  e => {
+  (e) => {
     if (e) {
       const dbError = {
         error: e,
-        msg: 'Error Connecting to Database. Please check MongoDB is running'
+        msg: 'Error Connecting to Database. Please check MongoDB is running',
       };
       console.log(dbError);
     } else {
@@ -68,7 +68,7 @@ app.use((req, res) => {
 });
 
 // Server Port Controls
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || '5000';
 app.set('port', port);
 const server = http.createServer(app);
 server.listen(port, () => console.log(`API running on localhost:${port}`));
