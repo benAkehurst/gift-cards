@@ -56,71 +56,43 @@ exports.add_stamp = async (req, res) => {
           );
         }
         if (newTotal === 10) {
-          /**
-           * Updates the transaction array
-           */
-          User.updateOne(
+          // Updates the stamps amount
+          // Updates the transactions array
+          // Updates the completed cards array
+          User.findOneAndUpdate(
             { customerId: customerId },
             {
+              $set: { current_stamps: 0 },
               $push: {
                 transactions: {
                   stamp_count: parseInt(numberOfStamps),
                   created_date: format(new Date(), 'dd/MM/yyyy'),
                 },
-              },
-            },
-            (err, done) => {
-              if (err) {
-                return res.status(500).json({
-                  success: false,
-                  title: 'Error adding transaction',
-                });
-              }
-            }
-          );
-          /**
-           * Updates the completed card array
-           */
-          User.updateOne(
-            { customerId: customerId },
-            {
-              $push: {
                 completed_cards: {
                   completed_date: format(new Date(), 'dd/MM/yyyy'),
                 },
               },
             },
-            (err, done) => {
+            { new: true },
+            (err, user) => {
               if (err) {
-                return res.status(500).json({
+                res.status(401).json({
                   success: false,
-                  title: 'Error adding completed card array',
+                  title:
+                    'Failed to add Stamp and update transactions array for 10 stamps',
+                  data: null,
                 });
               }
+              res.status(200).json({
+                success: true,
+                message: 'Stamp added',
+                data: {
+                  current_stamps: user.current_stamps,
+                  msg: 'User has freebie...',
+                },
+              });
             }
           );
-          /**
-           * Reset current_stamps to 0
-           */
-          User.updateOne(
-            { customerId: customerId },
-            { $set: { current_stamps: 0 } },
-            (err, done) => {
-              if (err) {
-                return res.status(500).json({
-                  success: false,
-                  title: 'Error reseting stamps to 0',
-                });
-              }
-            }
-          );
-          return res.status(200).json({
-            success: true,
-            title: 'Stamp added',
-            data: {
-              msg: 'User has freebie...',
-            },
-          });
         }
         if (newTotal > 10) {
           /**
@@ -193,7 +165,7 @@ exports.add_stamp = async (req, res) => {
         return res.status(500).json({
           success: false,
           title: 'Stamp count not valid',
-          data: {},
+          data: null,
         });
       }
     }
