@@ -7,7 +7,9 @@ import './Spinner.scss';
  */
 
 const Spinner = (props) => (
-  <div className={['Spinner', [props.size]].join(' ')}>Loading...</div>
+  <div className="SpinnerWrapper">
+    <div className={['Spinner', [props.size]].join(' ')}>Loading...</div>
+  </div>
 );
 
 export default Spinner;
