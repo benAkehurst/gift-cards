@@ -1,1 +1,17 @@
 @import '../../../variables.scss';
+
+.ErrorText {
+  margin-bottom: -70px;
+  z-index: 1000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: $spacing-24;
+  background-color: $error;
+  padding: $spacing-8;
+  color: $bg-white;
+  font-size: $font-size-01;
+  width: 100%;
+}

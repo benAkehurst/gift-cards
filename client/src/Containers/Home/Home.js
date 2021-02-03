@@ -5,7 +5,7 @@ import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { fetchUserInfo, checkUserLoggedIn } from '../../services/api/api';
 
-import Header from '../../components/UI/Header/Header';
+import WelcomeBar from '../../components/UI/WelcomeBar/WelcomeBar';
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
@@ -63,7 +63,9 @@ const Home = (props) => {
       {isError && <Error errorText="Something went wrong..." />}
       <section className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
-        <Header userName={name}></Header>
+      </section>
+      <section>
+        <WelcomeBar userName={name} />
       </section>
       <section>
         <Card currentStamps={currentStamps}></Card>
