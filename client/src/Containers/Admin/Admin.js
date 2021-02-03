@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Admin.scss';
 import axios from '../../axios-connector';
+import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
 
@@ -113,7 +114,7 @@ class Admin extends Component {
     return (
       <div className="Admin">
         <section className="Header">
-          <Banner>Tasty Coffe Rewards</Banner>
+          <Banner>{AppConfig.APP_NAME}</Banner>
           <h2>Admin Page</h2>
           <h3>Add stamps below:</h3>
         </section>

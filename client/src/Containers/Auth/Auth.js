@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Auth.scss';
 import axios from '../../axios-connector';
+import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import {
   addAdminStatus,
@@ -258,7 +259,7 @@ class Auth extends Component {
     return (
       <div className="Auth">
         <section className="Header">
-          <Banner>Tasty Coffe Rewards</Banner>
+          <Banner>{AppConfig.APP_NAME}</Banner>
         </section>
         <section className="FormContainer">
           <Button btnType={'General'} clicked={this.changeFormHandler}>
