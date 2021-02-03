@@ -59,9 +59,6 @@ exports.login_user = async (req, res) => {
           );
           let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
           userFiltered.token = token;
-          res.cookie('session', token, {
-            expiresIn: rememberMe ? '48h' : '1h',
-          });
           res.status(200).json({
             success: true,
             message: 'Successfully logged in',
@@ -163,14 +160,6 @@ exports.create_new_user = async (req, res) => {
         customerId: `_${Math.random().toString(36).substr(2, 8)}`,
       });
       const user = await newUser.save();
-      let token = jwt.sign(
-        { username: user.uniqueId },
-        process.env.JWT_SECRET,
-        {
-          // TODO: SET JWT TOKEN DURATION HERE
-          expiresIn: rememberMe ? '48h' : '1h',
-        }
-      );
       const baseUrl = req.protocol + '://' + req.get('host');
       const secretCode = cryptoRandomString({
         length: 6,
@@ -188,11 +177,16 @@ exports.create_new_user = async (req, res) => {
         html: `<p>Please use the following link within the next 10 minutes to activate your account on YOUR APP: <strong><a href="${baseUrl}/api/v1/auth/verification/verify-account/${user.uniqueId}/${secretCode}" target="_blank">Email Verification Link</a></strong></p>`,
       };
       await sendEmail(data);
+      const token = jwt.sign(
+        { username: user.uniqueId },
+        process.env.JWT_SECRET,
+        {
+          // TODO: SET JWT TOKEN DURATION HERE
+          expiresIn: '48h',
+        }
+      );
       let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
       userFiltered.token = token;
-      res.cookie('session', token, {
-        expiresIn: rememberMe ? '48h' : '1h',
-      });
       res.status(201).json({
         success: true,
         message: 'User created',
