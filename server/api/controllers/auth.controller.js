@@ -163,12 +163,12 @@ exports.create_new_user = async (req, res) => {
         customerId: `_${Math.random().toString(36).substr(2, 8)}`,
       });
       const user = await newUser.save();
-      const token = jwt.sign(
+      let token = jwt.sign(
         { username: user.uniqueId },
         process.env.JWT_SECRET,
         {
           // TODO: SET JWT TOKEN DURATION HERE
-          expiresIn: '24h',
+          expiresIn: rememberMe ? '48h' : '1h',
         }
       );
       const baseUrl = req.protocol + '://' + req.get('host');
@@ -190,6 +190,9 @@ exports.create_new_user = async (req, res) => {
       await sendEmail(data);
       let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
       userFiltered.token = token;
+      res.cookie('session', token, {
+        expiresIn: rememberMe ? '48h' : '1h',
+      });
       res.status(201).json({
         success: true,
         message: 'User created',
