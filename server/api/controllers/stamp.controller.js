@@ -27,11 +27,6 @@ exports.add_stamp = async (req, res) => {
           success: false,
           message: 'Failed to find user',
         });
-      } else if (!user.isAdmin) {
-        res.status(401).json({
-          success: false,
-          message: 'User is not admin',
-        });
       } else if (!tokenValid) {
         res.status(401).json({
           success: false,

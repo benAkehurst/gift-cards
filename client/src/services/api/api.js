@@ -38,7 +38,6 @@ export const login = (loginObject) => {
   return axios
     .post(`${BASE_URL}/api/v1/auth/login-user`, loginData)
     .then((response) => {
-      console.log('response: ', response);
       localStorage.setItem('token', response.data.data.token);
       localStorage.setItem('id', response.data.data.uniqueId);
       return response;

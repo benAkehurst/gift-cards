@@ -3,8 +3,7 @@ import './Home.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { getUserId } from '../../Helpers/localStorage';
-import { fetchUserInfo } from '../../services/api/api';
+import { fetchUserInfo, checkUserLoggedIn } from '../../services/api/api';
 
 import Header from '../../components/UI/Header/Header';
 import Banner from '../../components/UI/Banner/Banner';
@@ -25,8 +24,7 @@ const Home = (props) => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const uniqueId = getUserId();
-    if (!uniqueId) {
+    if (!checkUserLoggedIn()) {
       history.push({ pathname: '/auth' });
     }
     setIsLoading(true);
