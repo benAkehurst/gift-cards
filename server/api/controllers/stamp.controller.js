@@ -8,11 +8,11 @@ const User = mongoose.model('User');
 /**
  * Method to add stamp to user
  * POST
- * Params - /:customerId/:numberOfStamps/:token
+ * Params - /:requesterId/:customerId/:numberOfStamps/:token
  */
 exports.add_stamp = async (req, res) => {
-  const { customerId, numberOfStamps, token } = req.params;
-  if (!customerId || !numberOfStamps || !token) {
+  const { requesterId, customerId, numberOfStamps, token } = req.params;
+  if (!requesterId || !customerId || !numberOfStamps || !token) {
     res.status(400).json({
       success: false,
       message: 'Please provide all required fields',
@@ -20,12 +20,18 @@ exports.add_stamp = async (req, res) => {
     });
   } else {
     try {
+      const admin = await User.findOne({ uniqueId: requesterId });
       const user = await User.findOne({ customerId: customerId });
       const tokenValid = await checkToken(token);
       if (!user) {
         res.status(401).json({
           success: false,
           message: 'Failed to find user',
+        });
+      } else if (!admin.isAdmin) {
+        res.status(401).json({
+          success: false,
+          message: 'User not an admin',
         });
       } else if (!tokenValid) {
         res.status(401).json({
@@ -56,13 +62,14 @@ exports.add_stamp = async (req, res) => {
                 if (err) {
                   res.status(401).json({
                     success: false,
-                    title: 'Failed to add Stamp and update transactions array',
+                    message:
+                      'Failed to add Stamp and update transactions array',
                     data: null,
                   });
                 }
                 res.status(200).json({
                   success: true,
-                  title: 'Stamp added',
+                  message: 'Stamp added',
                   data: {
                     current_stamps: user.current_stamps,
                     transactions: user.transactions,
@@ -95,7 +102,7 @@ exports.add_stamp = async (req, res) => {
                 if (err) {
                   res.status(401).json({
                     success: false,
-                    title:
+                    message:
                       'Failed to add Stamp and update transactions array for 10 stamps',
                     data: null,
                   });
@@ -105,7 +112,7 @@ exports.add_stamp = async (req, res) => {
                   message: 'Stamp added',
                   data: {
                     current_stamps: user.current_stamps,
-                    msg: 'User has freebie...',
+                    message: 'User has freebie...',
                   },
                 });
               }
@@ -135,7 +142,7 @@ exports.add_stamp = async (req, res) => {
                 if (err) {
                   res.status(401).json({
                     success: false,
-                    title:
+                    message:
                       'Failed to add Stamp and update transactions array for 10 stamps',
                     data: null,
                   });
@@ -145,7 +152,7 @@ exports.add_stamp = async (req, res) => {
                   message: 'Stamp added',
                   data: {
                     current_stamps: user.current_stamps,
-                    msg: 'User has freebie...',
+                    message: 'User has freebie...',
                   },
                 });
               }
