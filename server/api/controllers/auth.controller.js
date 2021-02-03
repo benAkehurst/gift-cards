@@ -13,7 +13,6 @@ const {
 const { sendEmail } = require('../../middlewares/utils/emailService');
 const User = require('../models/user.model');
 const Code = require('../models/code.model');
-const Task = require('../models/task.model');
 
 /**
  * Logs a user in
@@ -58,20 +57,11 @@ exports.login_user = async (req, res) => {
               expiresIn: rememberMe ? '48h' : '1h',
             }
           );
-          let userFiltered = _.pick(user.toObject(), [
-            'firstName',
-            'uniqueId',
-            'customerId',
-            'current_stamps',
-            'completed_cards',
-            'transactions',
-            'isAdmin',
-          ]);
+          let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
           userFiltered.token = token;
           res.cookie('session', token, {
             expiresIn: rememberMe ? '48h' : '1h',
           });
-
           res.status(200).json({
             success: true,
             message: 'Successfully logged in',
@@ -198,15 +188,7 @@ exports.create_new_user = async (req, res) => {
         html: `<p>Please use the following link within the next 10 minutes to activate your account on YOUR APP: <strong><a href="${baseUrl}/api/v1/auth/verification/verify-account/${user.uniqueId}/${secretCode}" target="_blank">Email Verification Link</a></strong></p>`,
       };
       await sendEmail(data);
-      let userFiltered = _.pick(user.toObject(), [
-        'firstName',
-        'email',
-        'uniqueId',
-        'customerId',
-        'current_stamps',
-        'completed_cards',
-        'transactions',
-      ]);
+      let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
       userFiltered.token = token;
       res.status(201).json({
         success: true,
