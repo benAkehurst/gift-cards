@@ -4,6 +4,7 @@ import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
+import { fetchUserInfo } from '../../services/api/api';
 
 import Header from '../../components/UI/Header/Header';
 import Banner from '../../components/UI/Banner/Banner';
@@ -29,15 +30,14 @@ const Home = (props) => {
       history.push({ pathname: '/auth' });
     }
     setIsLoading(true);
-    axios
-      .get(`/user/fetch-user-info/${uniqueId}`)
+    fetchUserInfo()
       .then((res) => {
-        if (res.data.data) {
-          setName(res.data.data.firstName);
-          setCurrentStamps(res.data.data.current_stamps);
-          setCompletedCards(res.data.data.completed_cards);
-          setTransactions(res.data.data.transactions);
-          setAppId(res.data.data.customerId);
+        if (res.data) {
+          setName(res.data.firstName);
+          setCurrentStamps(res.data.current_stamps);
+          setCompletedCards(res.data.completed_cards);
+          setTransactions(res.data.transactions);
+          setAppId(res.data.customerId);
           setIsLoading(false);
         }
       })

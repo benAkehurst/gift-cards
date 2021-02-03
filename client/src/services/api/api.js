@@ -80,3 +80,15 @@ export const createNewUser = (newUserObject) => {
 export const logout = () => {
   localStorage.clear();
 };
+
+export const fetchUserInfo = () => {
+  const uniqueId = localStorage.getItem('id');
+  return axios
+    .get(`${BASE_URL}/api/v1/user/fetch-user-info/${uniqueId}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+};
