@@ -91,3 +91,16 @@ export const fetchUserInfo = () => {
       return error.response;
     });
 };
+
+export const addStamp = (data) => {
+  return axios
+    .post(
+      `${BASE_URL}/api/v1/stamps/add-stamp/${data.uniqueId}/${data.customerId}/${data.stampsToAdd}/${data.token}`
+    )
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+};
