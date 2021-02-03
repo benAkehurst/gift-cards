@@ -1,7 +1,7 @@
 import React from 'react';
 import './History.scss';
 
-import { dateFormatter } from '../../Helpers/timeAndDate';
+import { dateFormatter } from '../../services/timeAndDate';
 
 const History = (props) => {
   /**
