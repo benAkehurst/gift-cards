@@ -175,14 +175,14 @@ class Auth extends Component {
         .post('/auth/login-user', data)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data.obj);
-            if (res.data.obj.isAdmin) {
+            console.log(res.data.data);
+            if (res.data.data.isAdmin) {
               addAdminStatus(true);
-              addId(res.data.obj._id);
+              addId(res.data.data.uniqueId);
               this.props.history.push({ pathname: '/admin' });
             } else {
               addAdminStatus(false);
-              addId(res.data.obj._id);
+              addId(res.data.data.uniqueId);
               this.props.history.push({ pathname: '/home' });
             }
           }

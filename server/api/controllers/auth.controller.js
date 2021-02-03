@@ -65,6 +65,7 @@ exports.login_user = async (req, res) => {
             'current_stamps',
             'completed_cards',
             'transactions',
+            'isAdmin',
           ]);
           userFiltered.token = token;
           res.cookie('session', token, {
