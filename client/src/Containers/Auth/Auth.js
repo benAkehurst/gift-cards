@@ -3,11 +3,8 @@ import './Auth.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import {
-  addAdminStatus,
-  addId,
-  clearStorage,
-} from '../../Helpers/localStorage';
+import { addAdminStatus, clearStorage } from '../../Helpers/localStorage';
+import { login, createNewUser } from '../../services/api/api';
 
 import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
@@ -144,10 +141,11 @@ class Auth extends Component {
         name: this.state.controls.userName.value,
         email: this.state.controls.email.value,
         password: this.state.controls.password.value,
+        password2: this.state.controls.password.value,
+        acceptedTerms: true,
       };
       this.setState({ showLoader: true });
-      axios
-        .post('/auth/create-new-user', data)
+      createNewUser(data)
         .then((res) => {
           if (res.status === 201) {
             this.setState({
@@ -171,19 +169,16 @@ class Auth extends Component {
         password: this.state.controls.password.value,
         rememberMe: true,
       };
-      this.setState({ showLoader: false });
-      axios
-        .post('/auth/login-user', data)
+      this.setState({ showLoader: true });
+      login(data)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data.data);
+            this.setState({ showLoader: false });
             if (res.data.data.isAdmin) {
               addAdminStatus(true);
-              addId(res.data.data.uniqueId);
               this.props.history.push({ pathname: '/admin' });
             } else {
               addAdminStatus(false);
-              addId(res.data.data.uniqueId);
               this.props.history.push({ pathname: '/home' });
             }
           }
