@@ -69,9 +69,11 @@ app.use(cors());
 const adminRoutes = require('./api/routes/admin.routes');
 const authRoutes = require('./api/routes/auth.routes');
 const stampRoutes = require('./api/routes/stamp.routes');
+const userRoutes = require('./api/routes/user.routes');
 adminRoutes(app);
 authRoutes(app);
 stampRoutes(app);
+userRoutes(app);
 
 // 404 Handling
 app.use((req, res) => {
