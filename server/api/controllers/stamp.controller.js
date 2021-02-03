@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 const { format } = require('date-fns');
+const { v4: uuidv4 } = require('uuid');
 const { checkToken } = require('../../middlewares/validators');
 const User = mongoose.model('User');
 
@@ -51,6 +52,7 @@ exports.add_stamp = async (req, res) => {
                   transactions: {
                     stamp_count: parseInt(numberOfStamps),
                     created_date: format(new Date(), 'dd/MM/yyyy'),
+                    transaction_id: uuidv4(),
                   },
                 },
               },
@@ -86,6 +88,7 @@ exports.add_stamp = async (req, res) => {
                   transactions: {
                     stamp_count: parseInt(numberOfStamps),
                     created_date: format(new Date(), 'dd/MM/yyyy'),
+                    transaction_id: uuidv4(),
                   },
                   completed_cards: {
                     completed_date: format(new Date(), 'dd/MM/yyyy'),
@@ -128,6 +131,7 @@ exports.add_stamp = async (req, res) => {
                   transactions: {
                     stamp_count: parseInt(numberOfStamps),
                     created_date: format(new Date(), 'dd/MM/yyyy'),
+                    transaction_id: uuidv4(),
                   },
                 },
               },
