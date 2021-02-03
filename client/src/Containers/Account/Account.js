@@ -12,15 +12,17 @@ import History from '../../components/History/History';
 import Divider from '../../components/UI/Divider/Divider';
 
 const Account = (props) => {
+  const { history } = props;
+
   useEffect(() => {
     const _id = getUserId();
     if (!_id) {
-      props.history.push({ pathname: '/auth' });
+      history.push({ pathname: '/auth' });
     }
-  }, []);
+  }, [history]);
 
   const goBackHandler = () => {
-    props.history.goBack();
+    history.goBack();
   };
 
   return (
