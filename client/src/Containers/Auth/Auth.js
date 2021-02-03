@@ -146,7 +146,7 @@ class Auth extends Component {
       };
       this.setState({ showLoader: true });
       axios
-        .post('/user/create', data)
+        .post('/auth/create-new-user', data)
         .then((res) => {
           if (res.status === 201) {
             this.setState({
@@ -168,10 +168,11 @@ class Auth extends Component {
       let data = {
         email: this.state.controls.email.value,
         password: this.state.controls.password.value,
+        rememberMe: true,
       };
       this.setState({ showLoader: false });
       axios
-        .post('/user/login', data)
+        .post('/auth/login-user', data)
         .then((res) => {
           if (res.status === 200) {
             console.log(res.data.obj);
