@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Admin.scss';
 import axios from '../../axios-connector';
+import * as AppConfig from '../../config/AppConfig';
+import { addStamp } from '../../services/api/api';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
 
@@ -8,6 +10,7 @@ import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Error from '../../components/UI/Error/Error';
 
 class Admin extends Component {
   state = {
@@ -43,8 +46,10 @@ class Admin extends Component {
     },
     isSaving: false,
     stampsSaved: false,
+    successMessage: '',
+    isError: false,
+    errorMessage: '',
   };
-
   /**
    * Deals with how the inputs update the value on the state
    */
@@ -68,20 +73,34 @@ class Admin extends Component {
     this.setState({ isSaving: true, stampsSaved: false });
     const id = getUserId();
     const data = {
-      _id: id,
+      uniqueId: id,
       customerId: `_${this.state.controls.userId.value}`,
       stampsToAdd: this.state.controls.stamps.value,
+      token: window.localStorage.getItem('token'),
     };
-    axios
-      .post('/stamps/add-stamp', data)
-      .then((res) => {
-        if (res.status === 200) {
-          this.setState({ isSaving: false, stampsSaved: true });
-        }
-      })
-      .catch((err) => {
-        this.setState({ isSaving: false, stampsSaved: false });
-      });
+    addStamp(data).then((res) => {
+      if (res.status === 401 || res.status === 500) {
+        this.setState({
+          isSaving: false,
+          stampsSaved: false,
+          isError: true,
+          errorMessage: res.data.message,
+        });
+      } else {
+        console.log('res: ', res);
+        this.setState({
+          isSaving: false,
+          stampsSaved: true,
+          isError: false,
+          errorMessage: '',
+          successMessage: res.message,
+        });
+      }
+    });
+  };
+
+  clearMessage = () => {
+    this.setState({ isError: false, errorMessage: '', successMessage: '' });
   };
 
   render() {
@@ -109,11 +128,12 @@ class Admin extends Component {
         ADD
       </Button>
     );
-    const completed = <Banner>Stamps added successfully</Banner>;
+    const completed = <Banner>{this.state.successMessage}</Banner>;
+    const failed = <Error errorText={this.state.errorMessage} />;
     return (
       <div className="Admin">
         <section className="Header">
-          <Banner>Tasty Coffe Rewards</Banner>
+          <Banner>{AppConfig.APP_NAME}</Banner>
           <h2>Admin Page</h2>
           <h3>Add stamps below:</h3>
         </section>
@@ -122,7 +142,10 @@ class Admin extends Component {
           {button}
         </section>
         {this.state.isSaving ? <Spinner size={'medium'} /> : null}
-        <section>{this.state.stampsSaved ? completed : null}</section>
+        <section onClick={this.clearMessage}>
+          <section>{this.state.stampsSaved ? completed : null}</section>
+          <section>{this.state.isError ? failed : null}</section>
+        </section>
       </div>
     );
   }

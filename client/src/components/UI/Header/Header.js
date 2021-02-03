@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.scss';
 
-import { getTimeOfDay } from '../../../Helpers/timeAndDate';
+import { getTimeOfDay } from '../../../services/timeAndDate';
 
 /**
  * Props:

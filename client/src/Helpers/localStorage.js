@@ -19,5 +19,6 @@ export function getUserId() {
 export function clearStorage() {
   window.localStorage.removeItem('admin');
   window.localStorage.removeItem('id');
+  window.localStorage.removeItem('token');
   return true;
 }
