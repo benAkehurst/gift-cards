@@ -19,7 +19,7 @@ const History = (props) => {
         .reverse()
         .map((item) => {
           return (
-            <li key={item.completed_date}>
+            <li key={item.transaction_id}>
               {dateFormatter(item.completed_date)}
             </li>
           );
@@ -31,7 +31,7 @@ const History = (props) => {
         .reverse()
         .map((item) => {
           return (
-            <li key={item.created_date}>
+            <li key={item.transaction_id}>
               {dateFormatter(item.created_date)} - {item.stamp_count}{' '}
               {item.stamp_count > 1 ? <span>Stamps</span> : <span>Stamp</span>}
             </li>
