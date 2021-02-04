@@ -31,7 +31,13 @@ const Home = (props) => {
     setIsLoading(true);
     fetchUserInfo()
       .then((res) => {
-        if (res.data) {
+        if (!res.success) {
+          setIsLoading(false);
+          setIsError(true);
+          setTimeout(() => {
+            history.push({ pathname: '/auth' });
+          }, 2000);
+        } else if (res.success) {
           setName(res.data.firstName);
           setCurrentStamps(res.data.current_stamps);
           setCompletedCards(res.data.completed_cards);
@@ -42,8 +48,7 @@ const Home = (props) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        setIsError(false);
-        console.log(err);
+        setIsError(true);
       });
   }, [history]);
 
@@ -61,11 +66,17 @@ const Home = (props) => {
   const handleRefresh = () => {
     return fetchUserInfo()
       .then((res) => {
-        if (res.data) {
+        if (!res.success) {
+          setIsLoading(false);
+          setIsError(true);
+          setTimeout(() => {
+            history.push({ pathname: '/auth' });
+          }, 2000);
+        } else if (res.success) {
+          setIsLoading(false);
           setCurrentStamps(res.data.current_stamps);
           setCompletedCards(res.data.completed_cards);
           setTransactions(res.data.transactions);
-          setIsLoading(false);
         }
       })
       .catch((err) => {
@@ -79,7 +90,9 @@ const Home = (props) => {
     <PullToRefresh onRefresh={handleRefresh}>
       <div className="Home">
         {isLoading && <Spinner size="large"></Spinner>}
-        {isError && <Error errorText="Something went wrong..." />}
+        {isError && (
+          <Error errorText="Something went wrong... Resetting App..." />
+        )}
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
           <WelcomeBar userName={name} />

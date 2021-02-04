@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Account.scss';
 import * as AppConfig from '../../config/AppConfig';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { getUserId } from '../../Helpers/localStorage';
 import { logout } from '../../services/api/api';
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
@@ -14,20 +13,13 @@ import Divider from '../../components/UI/Divider/Divider';
 const Account = (props) => {
   const { history } = props;
 
-  useEffect(() => {
-    const _id = getUserId();
-    if (!_id) {
-      history.push({ pathname: '/auth' });
-    }
-  }, [history]);
-
   const goBackHandler = () => {
     history.goBack();
   };
 
   const logoutUser = () => {
     logout();
-    window.location.reload();
+    history.push({ pathname: '/auth' });
   };
 
   return (
