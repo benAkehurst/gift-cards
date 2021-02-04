@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const { format } = require('date-fns');
+const { format, addMinutes } = require('date-fns');
 const { v4: uuidv4 } = require('uuid');
 const { checkToken } = require('../../middlewares/validators');
 const User = mongoose.model('User');
@@ -23,6 +23,18 @@ exports.add_stamp = async (req, res) => {
       const admin = await User.findOne({ uniqueId: requesterId });
       const user = await User.findOne({ customerId: customerId });
       const tokenValid = await checkToken(token);
+      const singleTransactionObject = {
+        stamp_count: parseInt(numberOfStamps),
+        admin_user: admin.uniqueId,
+        created_date: format(new Date(), 'dd/MM/yyyy'),
+        created_time: format(new Date(), 'HH:mm:ss'),
+        transaction_id: uuidv4(),
+      };
+      const completedCardObject = {
+        admin_user: admin.uniqueId,
+        created_date: format(new Date(), 'dd/MM/yyyy'),
+        created_time: format(new Date(), 'HH:mm:ss'),
+      };
       if (!user) {
         res.status(401).json({
           success: false,
@@ -50,11 +62,7 @@ exports.add_stamp = async (req, res) => {
               {
                 $set: { current_stamps: newTotal },
                 $push: {
-                  transactions: {
-                    stamp_count: parseInt(numberOfStamps),
-                    created_date: format(new Date(), 'dd/MM/yyyy'),
-                    transaction_id: uuidv4(),
-                  },
+                  transactions: singleTransactionObject,
                 },
               },
               { new: true },
@@ -87,14 +95,8 @@ exports.add_stamp = async (req, res) => {
               {
                 $set: { current_stamps: 0 },
                 $push: {
-                  transactions: {
-                    stamp_count: parseInt(numberOfStamps),
-                    created_date: format(new Date(), 'dd/MM/yyyy'),
-                    transaction_id: uuidv4(),
-                  },
-                  completed_cards: {
-                    completed_date: format(new Date(), 'dd/MM/yyyy'),
-                  },
+                  transactions: singleTransactionObject,
+                  completed_cards: completedCardObject,
                 },
               },
               { new: true },
@@ -127,14 +129,8 @@ exports.add_stamp = async (req, res) => {
               {
                 $set: { current_stamps: newTotal - 10 },
                 $push: {
-                  completed_cards: {
-                    completed_date: format(new Date(), 'dd/MM/yyyy'),
-                  },
-                  transactions: {
-                    stamp_count: parseInt(numberOfStamps),
-                    created_date: format(new Date(), 'dd/MM/yyyy'),
-                    transaction_id: uuidv4(),
-                  },
+                  transactions: singleTransactionObject,
+                  completed_cards: completedCardObject,
                 },
               },
               { new: true },
