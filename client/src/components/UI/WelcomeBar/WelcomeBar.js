@@ -1,5 +1,5 @@
 import React from 'react';
-import './Header.scss';
+import './WelcomeBar.scss';
 
 import { getTimeOfDay } from '../../../services/timeAndDate';
 
@@ -8,10 +8,10 @@ import { getTimeOfDay } from '../../../services/timeAndDate';
  * userName: The name of the user
  */
 
-const Header = (props) => (
+const WelcomeBar = (props) => (
   <header className="Header">
     Good {getTimeOfDay()} {props.userName}!
   </header>
 );
 
-export default Header;
+export default WelcomeBar;

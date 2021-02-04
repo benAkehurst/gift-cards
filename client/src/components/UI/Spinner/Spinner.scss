@@ -1,3 +1,5 @@
+@import '../../../variables.scss';
+
 .SpinnerWrapper {
   z-index: 1000;
   top: 0;
@@ -11,7 +13,7 @@
   align-items: center;
   justify-content: center;
   .Spinner {
-    color: purple;
+    color: $primary-color;
     text-indent: -9999em;
     overflow: hidden;
     width: 1em;

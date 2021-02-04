@@ -87,7 +87,6 @@ class Admin extends Component {
           errorMessage: res.data.message,
         });
       } else {
-        console.log('res: ', res);
         this.setState({
           isSaving: false,
           stampsSaved: true,
@@ -100,7 +99,12 @@ class Admin extends Component {
   };
 
   clearMessage = () => {
-    this.setState({ isError: false, errorMessage: '', successMessage: '' });
+    this.setState({
+      stampsSaved: false,
+      isError: false,
+      errorMessage: '',
+      successMessage: '',
+    });
   };
 
   render() {
@@ -111,7 +115,7 @@ class Admin extends Component {
         config: this.state.controls[key],
       });
     }
-    const form = formElementsArray.map((formElement) => {
+    const addStampForm = formElementsArray.map((formElement) => {
       return (
         <Input
           label={formElement.config.elementConfig.label}
@@ -123,7 +127,7 @@ class Admin extends Component {
         />
       );
     });
-    const button = (
+    const addStampButton = (
       <Button btnType={'General'} clicked={this.onSubmitHandler}>
         ADD
       </Button>
@@ -138,8 +142,8 @@ class Admin extends Component {
           <h3>Add stamps below:</h3>
         </section>
         <section className="FormContainer">
-          {form}
-          {button}
+          {addStampForm}
+          {addStampButton}
         </section>
         {this.state.isSaving ? <Spinner size={'medium'} /> : null}
         <section onClick={this.clearMessage}>

@@ -5,13 +5,14 @@ import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { fetchUserInfo, checkUserLoggedIn } from '../../services/api/api';
 
-import Header from '../../components/UI/Header/Header';
+import WelcomeBar from '../../components/UI/WelcomeBar/WelcomeBar';
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Error from '../../components/UI/Error/Error';
 import Card from '../../components/Card/Card';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 
 const Home = (props) => {
   const { history } = props;
@@ -30,7 +31,13 @@ const Home = (props) => {
     setIsLoading(true);
     fetchUserInfo()
       .then((res) => {
-        if (res.data) {
+        if (!res.success) {
+          setIsLoading(false);
+          setIsError(true);
+          setTimeout(() => {
+            history.push({ pathname: '/auth' });
+          }, 2000);
+        } else if (res.success) {
           setName(res.data.firstName);
           setCurrentStamps(res.data.current_stamps);
           setCompletedCards(res.data.completed_cards);
@@ -41,8 +48,7 @@ const Home = (props) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        setIsError(false);
-        console.log(err);
+        setIsError(true);
       });
   }, [history]);
 
@@ -57,27 +63,54 @@ const Home = (props) => {
     });
   };
 
+  const handleRefresh = () => {
+    return fetchUserInfo()
+      .then((res) => {
+        if (!res.success) {
+          setIsLoading(false);
+          setIsError(true);
+          setTimeout(() => {
+            history.push({ pathname: '/auth' });
+          }, 2000);
+        } else if (res.success) {
+          setIsLoading(false);
+          setCurrentStamps(res.data.current_stamps);
+          setCompletedCards(res.data.completed_cards);
+          setTransactions(res.data.transactions);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setIsError(false);
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="Home">
-      {isLoading && <Spinner size="large"></Spinner>}
-      {isError && <Error errorText="Something went wrong..." />}
-      <section className="Header">
-        <Banner>{AppConfig.APP_NAME}</Banner>
-        <Header userName={name}></Header>
-      </section>
-      <section>
-        <Card currentStamps={currentStamps}></Card>
-      </section>
-      <section className="Controls">
-        <InfoDisplay dispStr={appId}></InfoDisplay>
-        <Button
-          btnType={'General'}
-          clicked={() => goToAccountHandler('account')}
-        >
-          Account
-        </Button>
-      </section>
-    </div>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="Home">
+        {isLoading && <Spinner size="large"></Spinner>}
+        {isError && (
+          <Error errorText="Something went wrong... Resetting App..." />
+        )}
+        <section className="Header">
+          <Banner>{AppConfig.APP_NAME}</Banner>
+          <WelcomeBar userName={name} />
+        </section>
+        <section>
+          <Card currentStamps={currentStamps}></Card>
+        </section>
+        <section className="Controls">
+          <InfoDisplay dispStr={appId}></InfoDisplay>
+          <Button
+            btnType={'General'}
+            clicked={() => goToAccountHandler('account')}
+          >
+            Account
+          </Button>
+        </section>
+      </div>
+    </PullToRefresh>
   );
 };
 

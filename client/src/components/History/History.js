@@ -1,8 +1,6 @@
 import React from 'react';
 import './History.scss';
 
-import { dateFormatter } from '../../services/timeAndDate';
-
 const History = (props) => {
   /**
    * Props:
@@ -13,18 +11,6 @@ const History = (props) => {
 
   let itemsList = null;
   switch (props.display) {
-    case 'completed':
-      itemsList = props.historyData
-        .slice(0)
-        .reverse()
-        .map((item) => {
-          return (
-            <li key={item.transaction_id}>
-              {dateFormatter(item.completed_date)}
-            </li>
-          );
-        });
-      break;
     case 'stamps':
       itemsList = props.historyData
         .slice(0)
@@ -32,8 +18,13 @@ const History = (props) => {
         .map((item) => {
           return (
             <li key={item.transaction_id}>
-              {dateFormatter(item.created_date)} - {item.stamp_count}{' '}
-              {item.stamp_count > 1 ? <span>Stamps</span> : <span>Stamp</span>}
+              <div className="singleStampInfo">
+                <div>
+                  <p>Time: {item.created_time}</p>
+                  <p>Date: {item.created_date}</p>
+                  <p>Stamps Received: {item.stamp_count}</p>
+                </div>
+              </div>
             </li>
           );
         });
@@ -45,7 +36,8 @@ const History = (props) => {
 
   return (
     <div className="History">
-      <p>{props.title}</p>
+      {props.historyData.length > 3 ? <h2>Scroll to see more</h2> : null}
+      <h3>{props.title}</h3>
       <ul>{itemsList}</ul>
     </div>
   );
