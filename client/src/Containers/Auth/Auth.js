@@ -175,7 +175,6 @@ class Auth extends Component {
       this.setState({ showLoader: true });
       login(data)
         .then((res) => {
-          console.log('res: ', res);
           this.setState({ showLoader: false });
           if (res.status === 400) {
             this.setState({
