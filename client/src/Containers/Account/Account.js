@@ -4,7 +4,7 @@ import * as AppConfig from '../../config/AppConfig';
 import axios from '../../axios-connector';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
-
+import { logout } from '../../services/api/api';
 import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
@@ -25,12 +25,20 @@ const Account = (props) => {
     history.goBack();
   };
 
+  const logoutUser = () => {
+    logout();
+    window.location.reload();
+  };
+
   return (
     <div className="Account">
       <section className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
       </section>
       <section className="HistoryContainer">
+        <Button btnType="General" clicked={logoutUser}>
+          Logout
+        </Button>
         <History
           historyData={props.location.state.transactions}
           title="Stamps"
