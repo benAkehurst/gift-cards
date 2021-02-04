@@ -36,12 +36,6 @@ const Account = (props) => {
           title="Stamps"
           display="stamps"
         />
-        <Divider size="small" />
-        <History
-          historyData={props.location.state.completedCards}
-          title="Completed Cards"
-          display="completed"
-        />
       </section>
       <section className="Controls">
         <InfoDisplay dispStr={props.location.state.appId}></InfoDisplay>
