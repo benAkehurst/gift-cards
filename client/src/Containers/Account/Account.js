@@ -8,7 +8,6 @@ import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import History from '../../components/History/History';
-import Divider from '../../components/UI/Divider/Divider';
 
 const Account = (props) => {
   const { history } = props;
