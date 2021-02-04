@@ -1,5 +1,6 @@
 import React from 'react';
 import './Input.scss';
+import * as AppConfig from '../../../config/AppConfig';
 
 const Input = (props) => {
   let inputElement = null;
@@ -13,9 +14,7 @@ const Input = (props) => {
     validationError = null;
     if (props.elementConfig.label === 'Password') {
       validationError = (
-        <p className="ValidationError">
-          Please enter a valid password with minimum of 6 characters
-        </p>
+        <p className="ValidationError">{AppConfig.PASSWORD_RULES}</p>
       );
     } else {
       validationError = (

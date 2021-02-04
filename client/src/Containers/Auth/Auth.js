@@ -10,6 +10,7 @@ import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Error from '../../components/UI/Error/Error';
 
 class Auth extends Component {
   state = {
@@ -54,7 +55,7 @@ class Auth extends Component {
         value: '',
         validation: {
           required: true,
-          minLength: 5,
+          minLength: 6,
         },
         valid: false,
         touched: false,
@@ -64,6 +65,8 @@ class Auth extends Component {
     hasRegistered: false,
     isformValid: false,
     isLoading: false,
+    showMessage: false,
+    messageText: '',
   };
 
   componentDidMount() {
@@ -172,8 +175,16 @@ class Auth extends Component {
       this.setState({ showLoader: true });
       login(data)
         .then((res) => {
+          console.log('res: ', res);
+          this.setState({ showLoader: false });
+          if (res.status === 400) {
+            this.setState({
+              showMessage: true,
+              messageText: res.data.message,
+              isRegister: false,
+            });
+          }
           if (res.status === 200) {
-            this.setState({ showLoader: false });
             if (res.data.data.isAdmin) {
               addAdminStatus(true);
               this.props.history.push({ pathname: '/admin' });
@@ -263,12 +274,15 @@ class Auth extends Component {
           <form className="FormElements">
             <h3>{!this.state.isRegister ? 'Login' : 'Register Now'}</h3>
             {this.state.isRegister ? registerForm : loginForm}
-            {formButton}
           </form>
+          {formButton}
           {this.state.hasRegistered ? (
             <Banner>Thanks for registering, now login!</Banner>
           ) : null}
         </section>
+        {this.state.messageText ? (
+          <Error errorText={this.state.messageText} />
+        ) : null}
         {this.state.showLoader ? <Spinner size="medium" /> : null}
       </div>
     );
