@@ -242,9 +242,9 @@ class Auth extends Component {
         />
       );
     });
-    const button = (
+    const formButton = (
       <Button
-        btnType={'Login'}
+        btnType="Login"
         disabled={!this.state.isformValid}
         clicked={this.onSubmitHandler}
       >
@@ -257,17 +257,19 @@ class Auth extends Component {
           <Banner>{AppConfig.APP_NAME}</Banner>
         </section>
         <section className="FormContainer">
-          <Button btnType={'General'} clicked={this.changeFormHandler}>
+          <Button btnType="General" clicked={this.changeFormHandler}>
             Go to {this.state.isRegister ? 'Login' : 'Register'}
           </Button>
-          <h2>{!this.state.isRegister ? 'Login' : 'Register Now'}</h2>
-          <form>{this.state.isRegister ? registerForm : loginForm}</form>
-          {button}
+          <form className="FormElements">
+            <h3>{!this.state.isRegister ? 'Login' : 'Register Now'}</h3>
+            {this.state.isRegister ? registerForm : loginForm}
+            {formButton}
+          </form>
           {this.state.hasRegistered ? (
             <Banner>Thanks for registering, now login!</Banner>
           ) : null}
         </section>
-        {this.state.showLoader ? <Spinner size={'medium'} /> : null}
+        {this.state.showLoader ? <Spinner size="medium" /> : null}
       </div>
     );
   }
