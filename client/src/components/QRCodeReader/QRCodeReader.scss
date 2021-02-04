@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+
+.camStyle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.previewStyle {
+  height: 250px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+}
