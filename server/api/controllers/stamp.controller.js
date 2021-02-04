@@ -78,10 +78,7 @@ exports.add_stamp = async (req, res) => {
                 res.status(200).json({
                   success: true,
                   message: 'Stamp added',
-                  data: {
-                    current_stamps: user.current_stamps,
-                    transactions: user.transactions,
-                  },
+                  data: {},
                 });
               }
             );
@@ -111,11 +108,8 @@ exports.add_stamp = async (req, res) => {
                 }
                 res.status(200).json({
                   success: true,
-                  message: 'Stamp added',
-                  data: {
-                    current_stamps: user.current_stamps,
-                    message: 'User has freebie...',
-                  },
+                  message: 'User has freebie...',
+                  data: {},
                 });
               }
             );
@@ -145,11 +139,8 @@ exports.add_stamp = async (req, res) => {
                 }
                 res.status(200).json({
                   success: true,
-                  message: 'Stamp added',
-                  data: {
-                    current_stamps: user.current_stamps,
-                    message: 'User has freebie...',
-                  },
+                  message: 'User has freebie...',
+                  data: {},
                 });
               }
             );
