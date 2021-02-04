@@ -12,6 +12,7 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Error from '../../components/UI/Error/Error';
 import Card from '../../components/Card/Card';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 
 const Home = (props) => {
   const { history } = props;
@@ -57,27 +58,46 @@ const Home = (props) => {
     });
   };
 
+  const handleRefresh = () => {
+    return fetchUserInfo()
+      .then((res) => {
+        if (res.data) {
+          setCurrentStamps(res.data.current_stamps);
+          setCompletedCards(res.data.completed_cards);
+          setTransactions(res.data.transactions);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setIsError(false);
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="Home">
-      {isLoading && <Spinner size="large"></Spinner>}
-      {isError && <Error errorText="Something went wrong..." />}
-      <section className="Header">
-        <Banner>{AppConfig.APP_NAME}</Banner>
-        <WelcomeBar userName={name} />
-      </section>
-      <section>
-        <Card currentStamps={currentStamps}></Card>
-      </section>
-      <section className="Controls">
-        <InfoDisplay dispStr={appId}></InfoDisplay>
-        <Button
-          btnType={'General'}
-          clicked={() => goToAccountHandler('account')}
-        >
-          Account
-        </Button>
-      </section>
-    </div>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="Home">
+        {isLoading && <Spinner size="large"></Spinner>}
+        {isError && <Error errorText="Something went wrong..." />}
+        <section className="Header">
+          <Banner>{AppConfig.APP_NAME}</Banner>
+          <WelcomeBar userName={name} />
+        </section>
+        <section>
+          <Card currentStamps={currentStamps}></Card>
+        </section>
+        <section className="Controls">
+          <InfoDisplay dispStr={appId}></InfoDisplay>
+          <Button
+            btnType={'General'}
+            clicked={() => goToAccountHandler('account')}
+          >
+            Account
+          </Button>
+        </section>
+      </div>
+    </PullToRefresh>
   );
 };
 
