@@ -1,14 +1,13 @@
 const QRCode = require('qrcode');
 
 /**
- * Generates a QR Code from a url string
- * @param {string} url
+ * Generates a QR Code from a unique id string
+ * @param {string} externalUserId
  */
-const generateQRCode = async (url) => {
-  console.log('url: ', url);
-  return QRCode.toDataURL(url)
-    .then((url) => {
-      return url;
+const generateQRCode = async (externalUserId) => {
+  return QRCode.toDataURL(externalUserId)
+    .then((encodedExternalUserId) => {
+      return encodedExternalUserId;
     })
     .catch((err) => {
       return err;

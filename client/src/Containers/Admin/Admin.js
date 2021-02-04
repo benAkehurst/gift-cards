@@ -75,7 +75,7 @@ class Admin extends Component {
     const id = getUserId();
     const data = {
       uniqueId: id,
-      customerId: `_${this.state.controls.userId.value}`,
+      customerId: this.state.controls.userId.value,
       stampsToAdd: this.state.controls.stamps.value,
       token: window.localStorage.getItem('token'),
     };

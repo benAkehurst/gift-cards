@@ -151,7 +151,7 @@ exports.create_new_user = async (req, res) => {
   } else {
     try {
       const customerId = `_${Math.random().toString(36).substr(2, 8)}`;
-      const qrCode = await generateQRCode(customerId);
+      const generatedQrCode = await generateQRCode(customerId);
       const newUser = new User({
         firstName: firstName ? firstName : '',
         lastName: lastName ? lastName : '',
@@ -160,8 +160,8 @@ exports.create_new_user = async (req, res) => {
         acceptedTerms: true,
         createdOnDate: format(new Date(), 'dd/MM/yyyy'),
         uniqueId: uuidv4(),
-        qrCode,
-        customerId: `_${Math.random().toString(36).substr(2, 8)}`,
+        qrCode: generatedQrCode,
+        customerId: customerId,
       });
       const user = await newUser.save();
       const baseUrl = req.protocol + '://' + req.get('host');
