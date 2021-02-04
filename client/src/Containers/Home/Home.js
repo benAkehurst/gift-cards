@@ -63,8 +63,6 @@ const Home = (props) => {
       {isError && <Error errorText="Something went wrong..." />}
       <section className="Header">
         <Banner>{AppConfig.APP_NAME}</Banner>
-      </section>
-      <section>
         <WelcomeBar userName={name} />
       </section>
       <section>
