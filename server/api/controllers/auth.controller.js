@@ -10,6 +10,7 @@ const {
   validateEmail,
   checkToken,
 } = require('../../middlewares/validators');
+const { generateQRCode } = require('../../middlewares/QRCodeUtils');
 const { sendEmail } = require('../../middlewares/utils/emailService');
 const User = require('../models/user.model');
 const Code = require('../models/code.model');
@@ -149,6 +150,8 @@ exports.create_new_user = async (req, res) => {
     });
   } else {
     try {
+      const customerId = `_${Math.random().toString(36).substr(2, 8)}`;
+      const qrCode = await generateQRCode(customerId);
       const newUser = new User({
         firstName: firstName ? firstName : '',
         lastName: lastName ? lastName : '',
@@ -157,6 +160,7 @@ exports.create_new_user = async (req, res) => {
         acceptedTerms: true,
         createdOnDate: format(new Date(), 'dd/MM/yyyy'),
         uniqueId: uuidv4(),
+        qrCode,
         customerId: `_${Math.random().toString(36).substr(2, 8)}`,
       });
       const user = await newUser.save();
