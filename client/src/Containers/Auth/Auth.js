@@ -6,6 +6,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { addAdminStatus, clearStorage } from '../../Helpers/localStorage';
 import { login, createNewUser } from '../../services/api/api';
 
+import GoogleLogin from 'react-google-login';
 import Button from '../../components/UI/Button/Button';
 import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
@@ -214,6 +215,42 @@ class Auth extends Component {
     }
   };
 
+  handleGoogleAuth = async (googleData) => {
+    let requestLocation = '';
+    if (this.state.isRegister) {
+      requestLocation = 'register';
+    } else {
+      requestLocation = 'login';
+    }
+    const res = await fetch('http://localhost:5000/api/v1/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({
+        token: googleData.tokenId,
+        requestLocation: requestLocation,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const response = await res.json();
+    if (response.message === 'Email already exists, try logging in') {
+      this.setState({
+        messageText: response.message,
+      });
+    }
+    if (response.message === 'Please Login') {
+      this.setState({
+        messageText: 'Registered successfully, please login!',
+      });
+    }
+    if (response.message === 'Login Successful') {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('id', response.data.uniqueId);
+      addAdminStatus(false);
+      this.props.history.push({ pathname: '/home' });
+    }
+  };
+
   render() {
     const formElementsArray = [];
     for (let key in this.state.controls) {
@@ -265,13 +302,26 @@ class Auth extends Component {
       <div className="Auth">
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
+          <h3>{!this.state.isRegister ? 'Login' : 'Register Now'}</h3>
+        </section>
+        <section className="socialLogin">
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            // clientId={
+            //   '638549534944-6ttkd9s2g1f4e5e6pkn17bs1bj87ak5d.apps.googleusercontent.com'
+            // }
+            buttonText={
+              this.state.isRegister
+                ? 'Register with Google'
+                : 'Login with Google'
+            }
+            onSuccess={this.handleGoogleAuth}
+            onFailure={this.handleGoogleAuth}
+            cookiePolicy={'single_host_origin'}
+          />
         </section>
         <section className="FormContainer">
-          <Button btnType="General" clicked={this.changeFormHandler}>
-            Go to {this.state.isRegister ? 'Login' : 'Register'}
-          </Button>
           <form className="FormElements">
-            <h3>{!this.state.isRegister ? 'Login' : 'Register Now'}</h3>
             {this.state.isRegister ? registerForm : loginForm}
           </form>
           {formButton}
@@ -279,6 +329,9 @@ class Auth extends Component {
             <Banner>Thanks for registering, now login!</Banner>
           ) : null}
         </section>
+        <Button btnType="General" clicked={this.changeFormHandler}>
+          Go to {this.state.isRegister ? 'Login' : 'Register'}
+        </Button>
         {this.state.messageText ? (
           <Error errorText={this.state.messageText} />
         ) : null}
