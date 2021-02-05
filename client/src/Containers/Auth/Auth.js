@@ -307,9 +307,6 @@ class Auth extends Component {
         <section className="socialLogin">
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            // clientId={
-            //   '638549534944-6ttkd9s2g1f4e5e6pkn17bs1bj87ak5d.apps.googleusercontent.com'
-            // }
             buttonText={
               this.state.isRegister
                 ? 'Register with Google'
