@@ -14,6 +14,9 @@ const { generateQRCode } = require('../../middlewares/QRCodeUtils');
 const { sendEmail } = require('../../middlewares/utils/emailService');
 const User = require('../models/user.model');
 const Code = require('../models/code.model');
+const { OAuth2Client } = require('google-auth-library');
+const { async } = require('crypto-random-string');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 /**
  * Logs a user in
@@ -475,5 +478,92 @@ exports.check_token_valid_external = async (req, res) => {
       message: 'Oh, something went wrong checking token. Please try again!',
       data: null,
     });
+  }
+};
+
+/**
+ * Handles login with google request
+ */
+exports.googleLogin = async (req, res) => {
+  const { token, requestLocation } = req.body;
+  if (!token) {
+    res.status(400).json({
+      success: false,
+      message: 'Incorrect Request Parameters',
+      data: null,
+    });
+  } else {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub, name, email, picture } = payload;
+    const userId = sub;
+    const user = { userId, email, fullName: name, photoUrl: picture };
+    if (requestLocation === 'register') {
+      let createUser = await createUserFromGoogleRegister(
+        user.userId,
+        user.email,
+        user.fullName
+      );
+      if (!createUser) {
+        res
+          .status(400)
+          .json({ message: 'Email already exists, try logging in' });
+      } else {
+        res.status(201).json({ message: 'Please Login', data: createUser });
+      }
+    } else if (requestLocation === 'login') {
+      let loginUser = await loginUserViaGoogleLogin(user.userId, user.email);
+      res.status(201).json({ message: 'Login Successful', data: loginUser });
+    }
+  }
+};
+
+const createUserFromGoogleRegister = async (userId, email, name) => {
+  let emailExists = await User.findOne({ email: email });
+  if (emailExists) {
+    return false;
+  } else {
+    const customerId = `_${Math.random().toString(36).substr(2, 8)}`;
+    const generatedQrCode = await generateQRCode(customerId);
+    const newUser = new User({
+      firstName: name ? name : '',
+      email: email,
+      password: bcrypt.hashSync(userId, 14),
+      acceptedTerms: true,
+      createdOnDate: format(new Date(), 'dd/MM/yyyy'),
+      uniqueId: uuidv4(),
+      qrCode: generatedQrCode,
+      customerId: customerId,
+      userActive: true,
+    });
+    const user = await newUser.save();
+    return user;
+  }
+};
+
+const loginUserViaGoogleLogin = async (userId, email) => {
+  const user = await User.findOne({ email: sanitize(email) });
+  if (!user) {
+    return false;
+  } else {
+    const pwCheckSuccess = await bcrypt.compare(userId, user.password);
+    if (!pwCheckSuccess) {
+      return false;
+    } else {
+      let token = jwt.sign(
+        { username: user.uniqueId },
+        process.env.JWT_SECRET,
+        {
+          // TODO: SET JWT TOKEN DURATION HERE
+          expiresIn: '48h',
+        }
+      );
+      let userFiltered = { uniqueId: user.uniqueId, isAdmin: user.isAdmin };
+      userFiltered.token = token;
+      return userFiltered;
+    }
   }
 };

@@ -20,4 +20,5 @@ module.exports = (app) => {
   app
     .route('/api/v1/auth/check-token-valid-external/:token')
     .get(authController.check_token_valid_external);
+  app.route('/api/v1/auth/google').post(authController.googleLogin);
 };
