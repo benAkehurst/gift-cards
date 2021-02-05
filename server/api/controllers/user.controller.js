@@ -31,6 +31,7 @@ exports.fetch_user_information = async (req, res) => {
           'current_stamps',
           'completed_cards',
           'transactions',
+          'qrCode',
         ]);
         res.status(200).json({
           success: true,

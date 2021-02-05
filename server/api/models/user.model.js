@@ -33,6 +33,10 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
+    qrCode: {
+      type: String,
+      required: false,
+    },
     current_stamps: {
       type: Number,
       default: 0,

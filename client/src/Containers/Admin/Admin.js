@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import './Admin.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
-import { addStamp } from '../../services/api/api';
+import { addStamp, logout } from '../../services/api/api';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { getUserId } from '../../Helpers/localStorage';
 
+import QRCodeReader from '../../components/QRCodeReader/QRCodeReader';
 import Banner from '../../components/UI/Banner/Banner';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -74,7 +75,7 @@ class Admin extends Component {
     const id = getUserId();
     const data = {
       uniqueId: id,
-      customerId: `_${this.state.controls.userId.value}`,
+      customerId: this.state.controls.userId.value,
       stampsToAdd: this.state.controls.stamps.value,
       token: window.localStorage.getItem('token'),
     };
@@ -105,6 +106,23 @@ class Admin extends Component {
       errorMessage: '',
       successMessage: '',
     });
+  };
+
+  handleScanChange = (QRCodeId) => {
+    const updatedControls = {
+      ...this.state.controls,
+      ['userId']: {
+        ...this.state.controls['userId'],
+        value: QRCodeId,
+        touched: true,
+      },
+    };
+    this.setState({ controls: updatedControls });
+  };
+
+  logoutUser = () => {
+    logout();
+    this.props.history.push({ pathname: '/auth' });
   };
 
   render() {
@@ -139,7 +157,13 @@ class Admin extends Component {
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
           <h2>Admin Page</h2>
+          <Button btnType="General" clicked={this.logoutUser}>
+            Logout
+          </Button>
           <h3>Add stamps below:</h3>
+        </section>
+        <section>
+          <QRCodeReader onScanQrCode={this.handleScanChange} />
         </section>
         <section className="FormContainer">
           {addStampForm}

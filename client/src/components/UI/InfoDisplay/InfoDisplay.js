@@ -7,11 +7,7 @@ import './InfoDisplay.scss';
  */
 
 const InfoDisplay = (props) => {
-  let appId = null;
-  if (props.dispStr) {
-    appId = props.dispStr.substr(1);
-  }
-  return <p className="InfoDisplay">ID - {appId}</p>;
+  return <p className="InfoDisplay">ID - {props.dispStr}</p>;
 };
 
 export default InfoDisplay;
