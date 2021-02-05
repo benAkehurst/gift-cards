@@ -17,9 +17,9 @@
   border: 1px solid #ccc;
   background-color: white;
   font: inherit;
-  padding: $spacing-8 $spacing-8;
+  padding: $spacing-8 $spacing-16;
   display: block;
-  width: 100%;
+  min-width: 275px;
   box-sizing: border-box;
 }
 
@@ -36,4 +36,5 @@
 .ValidationError {
   color: $error;
   margin: 5px 0;
+  max-width: 250px;
 }
