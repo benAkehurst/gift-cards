@@ -111,7 +111,7 @@ class Admin extends Component {
   handleScanChange = (QRCodeId) => {
     const updatedControls = {
       ...this.state.controls,
-      ['userId']: {
+      [this.state.controls.userId]: {
         ...this.state.controls['userId'],
         value: QRCodeId,
         touched: true,

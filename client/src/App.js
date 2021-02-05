@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { PrivateRoute } from './hoc/PrivateRoute/PrivateRoute';
 
 import Layout from './hoc/Layout/Layout';
@@ -14,6 +14,7 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
+            <Redirect exact from="/" to="/home" />
             <Route path="/auth" component={Auth}></Route>
             <Route path="/home" component={Home}></Route>
             <Route path="/account" component={Account}></Route>
