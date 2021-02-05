@@ -55,6 +55,9 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    userAcquisitionLocation: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

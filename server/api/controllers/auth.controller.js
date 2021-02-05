@@ -165,6 +165,7 @@ exports.create_new_user = async (req, res) => {
         uniqueId: uuidv4(),
         qrCode: generatedQrCode,
         customerId: customerId,
+        userAcquisitionLocation: 'Registration Form',
       });
       const user = await newUser.save();
       const baseUrl = req.protocol + '://' + req.get('host');
@@ -538,6 +539,7 @@ const createUserFromGoogleRegister = async (userId, email, name) => {
       qrCode: generatedQrCode,
       customerId: customerId,
       userActive: true,
+      userAcquisitionLocation: 'Google',
     });
     const user = await newUser.save();
     return user;
