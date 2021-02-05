@@ -19,6 +19,7 @@ const Home = (props) => {
   const { history } = props;
   const [name, setName] = useState(null);
   const [qrCode, setQRCode] = useState('');
+  const [showQrCode, setShowQrCode] = useState(true);
   const [currentStamps, setCurrentStamps] = useState(0);
   const [completedCards, setCompletedCards] = useState(null);
   const [transactions, setTransactions] = useState(null);
@@ -89,6 +90,14 @@ const Home = (props) => {
       });
   };
 
+  const showQrCodeHandler = () => {
+    if (showQrCode) {
+      setShowQrCode(false);
+    } else {
+      setShowQrCode(true);
+    }
+  };
+
   return (
     <PullToRefresh onRefresh={handleRefresh}>
       <div className="Home">
@@ -104,8 +113,13 @@ const Home = (props) => {
           <Card currentStamps={currentStamps}></Card>
         </section>
         <section className="Controls">
-          <QRCode qrCodeURI={qrCode} />
-          <InfoDisplay dispStr={appId} />
+          <button className="changeIdButton" onClick={showQrCodeHandler}>
+            {showQrCode ? (
+              <QRCode qrCodeURI={qrCode} />
+            ) : (
+              <InfoDisplay dispStr={appId} />
+            )}
+          </button>
           <Button
             btnType={'General'}
             clicked={() => goToAccountHandler('account')}
