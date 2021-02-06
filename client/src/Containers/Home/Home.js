@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home.scss';
+import '../../globals.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
@@ -18,6 +19,7 @@ const Home = (props) => {
   const { history } = props;
   const [name, setName] = useState(null);
   const [qrCode, setQRCode] = useState('');
+  const [qrCodeReader, setQrCodeReader] = useState(false);
   const [currentStamps, setCurrentStamps] = useState(0);
   const [completedCards, setCompletedCards] = useState(null);
   const [transactions, setTransactions] = useState(null);
@@ -92,6 +94,24 @@ const Home = (props) => {
   const handleScanChange = (QRCodeId) => {
     // let r = Math.random().toString(36).substring(3) <-- random string
     console.log('QRCodeId: ', QRCodeId);
+
+    /**
+     * Logic
+     * user scans staff qr code with is a random string
+     * user posts string, userID, token to the server
+     * server checks string is valid
+     * if yes, add stamp
+     * if no, send error
+     * stamp added, send response back to client and update stamps card
+     */
+  };
+
+  const showQrCodeScanner = () => {
+    if (qrCodeReader) {
+      setQrCodeReader(false);
+    } else {
+      setQrCodeReader(true);
+    }
   };
 
   return (
@@ -102,10 +122,15 @@ const Home = (props) => {
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
           <WelcomeBar userName={name} />
+          <button onClick={showQrCodeScanner} className="Button General">
+            {!qrCodeReader ? 'Open' : 'Close'} Code Scanner
+          </button>
         </section>
-        <section>
-          <QRCodeReader onScanQrCode={handleScanChange} size="UserStyle" />
-        </section>
+        {qrCodeReader ? (
+          <section>
+            <QRCodeReader onScanQrCode={handleScanChange} size="UserStyle" />
+          </section>
+        ) : null}
         <section>
           <Card currentStamps={currentStamps} />
         </section>
