@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Account.scss';
 import * as AppConfig from '../../config/AppConfig';
 import axios from '../../axios-connector';
@@ -8,9 +8,11 @@ import Banner from '../../components/UI/Banner/Banner';
 import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import History from '../../components/History/History';
+import QRCode from '../../components/UI/QRCode/QRCode';
 
 const Account = (props) => {
   const { history } = props;
+  const [showQrCode, setShowQrCode] = useState(true);
 
   const goBackHandler = () => {
     history.goBack();
@@ -19,6 +21,14 @@ const Account = (props) => {
   const logoutUser = () => {
     logout();
     history.push({ pathname: '/auth' });
+  };
+
+  const showQrCodeHandler = () => {
+    if (showQrCode) {
+      setShowQrCode(false);
+    } else {
+      setShowQrCode(true);
+    }
   };
 
   return (
@@ -37,7 +47,13 @@ const Account = (props) => {
         />
       </section>
       <section className="Controls">
-        <InfoDisplay dispStr={props.location.state.appId}></InfoDisplay>
+        <button className="changeIdButton" onClick={showQrCodeHandler}>
+          {showQrCode ? (
+            <QRCode qrCodeURI={props.location.state.qrCode} />
+          ) : (
+            <InfoDisplay dispStr={props.location.state.appId} />
+          )}
+        </button>
         <Button btnType="General" clicked={goBackHandler}>
           Back
         </Button>

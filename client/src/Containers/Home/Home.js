@@ -7,12 +7,10 @@ import { fetchUserInfo, checkUserLoggedIn } from '../../services/api/api';
 
 import WelcomeBar from '../../components/UI/WelcomeBar/WelcomeBar';
 import Banner from '../../components/UI/Banner/Banner';
-import InfoDisplay from '../../components/UI/InfoDisplay/InfoDisplay';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Error from '../../components/UI/Error/Error';
 import Card from '../../components/Card/Card';
-import QRCode from '../../components/UI/QRCode/QRCode';
 import QRCodeReader from '../../components/QRCodeReader/QRCodeReader';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 
@@ -20,7 +18,6 @@ const Home = (props) => {
   const { history } = props;
   const [name, setName] = useState(null);
   const [qrCode, setQRCode] = useState('');
-  const [showQrCode, setShowQrCode] = useState(true);
   const [currentStamps, setCurrentStamps] = useState(0);
   const [completedCards, setCompletedCards] = useState(null);
   const [transactions, setTransactions] = useState(null);
@@ -64,6 +61,7 @@ const Home = (props) => {
         completedCards: completedCards,
         transactions: transactions,
         appId: appId,
+        qrCode: qrCode,
       },
     });
   };
@@ -89,14 +87,6 @@ const Home = (props) => {
         setIsError(false);
         console.log(err);
       });
-  };
-
-  const showQrCodeHandler = () => {
-    if (showQrCode) {
-      setShowQrCode(false);
-    } else {
-      setShowQrCode(true);
-    }
   };
 
   const handleScanChange = (QRCodeId) => {
@@ -125,13 +115,6 @@ const Home = (props) => {
           <Card currentStamps={currentStamps}></Card>
         </section>
         <section className="Controls">
-          <button className="changeIdButton" onClick={showQrCodeHandler}>
-            {showQrCode ? (
-              <QRCode qrCodeURI={qrCode} />
-            ) : (
-              <InfoDisplay dispStr={appId} />
-            )}
-          </button>
           <Button
             btnType={'General'}
             clicked={() => goToAccountHandler('account')}
