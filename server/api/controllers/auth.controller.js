@@ -487,13 +487,14 @@ exports.check_token_valid_external = async (req, res) => {
  */
 exports.googleLogin = async (req, res) => {
   const { token, requestLocation } = req.body;
-  if (!token) {
+  if (!token || !requestLocation) {
     res.status(400).json({
       success: false,
       message: 'Incorrect Request Parameters',
       data: null,
     });
-  } else {
+  }
+  try {
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.CLIENT_ID,
@@ -519,9 +520,22 @@ exports.googleLogin = async (req, res) => {
       let loginUser = await loginUserViaGoogleLogin(user.userId, user.email);
       res.status(201).json({ message: 'Login Successful', data: loginUser });
     }
+  } catch {
+    res.status(500).json({
+      success: false,
+      message:
+        'Oh, something went wrong doing auth with Google. Please try again!',
+      data: null,
+    });
   }
 };
 
+/**
+ * Used to create a new user in the DB when user registers with goolge button
+ * @param {*} userId
+ * @param {*} email
+ * @param {*} name
+ */
 const createUserFromGoogleRegister = async (userId, email, name) => {
   let emailExists = await User.findOne({ email: email });
   if (emailExists) {
@@ -546,6 +560,11 @@ const createUserFromGoogleRegister = async (userId, email, name) => {
   }
 };
 
+/**
+ * Runs the login flow if a user logins with google
+ * @param {*} userId
+ * @param {*} email
+ */
 const loginUserViaGoogleLogin = async (userId, email) => {
   const user = await User.findOne({ email: sanitize(email) });
   if (!user) {
