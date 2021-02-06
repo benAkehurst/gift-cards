@@ -4,7 +4,7 @@ import QrReader from 'react-qr-reader';
 
 class QRCodeReader extends Component {
   state = {
-    result: 'No result',
+    result: '',
   };
 
   handleScan = (data) => {
@@ -21,14 +21,13 @@ class QRCodeReader extends Component {
     return (
       <div className="camStyle">
         <QrReader
-          className="previewStyle"
+          className={this.props.size}
           delay={500}
           facingMode="environment"
           resolution={800}
           onError={this.handleError}
           onScan={this.handleScan}
         />
-        <p>{this.state.result}</p>
       </div>
     );
   }

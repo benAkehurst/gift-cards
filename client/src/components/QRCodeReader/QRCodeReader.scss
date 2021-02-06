@@ -6,9 +6,16 @@
   justify-content: center;
 }
 
-.previewStyle {
+.AdminStyle {
   height: 250px;
   width: 250px;
+  display: flex;
+  justify-content: center;
+}
+
+.UserStyle {
+  height: 150px;
+  width: 150px;
   display: flex;
   justify-content: center;
 }

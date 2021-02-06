@@ -13,6 +13,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import Error from '../../components/UI/Error/Error';
 import Card from '../../components/Card/Card';
 import QRCode from '../../components/UI/QRCode/QRCode';
+import QRCodeReader from '../../components/QRCodeReader/QRCodeReader';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 
 const Home = (props) => {
@@ -98,6 +99,11 @@ const Home = (props) => {
     }
   };
 
+  const handleScanChange = (QRCodeId) => {
+    // let r = Math.random().toString(36).substring(3) <-- random string
+    console.log('QRCodeId: ', QRCodeId);
+  };
+
   return (
     <PullToRefresh onRefresh={handleRefresh}>
       <div className="Home">
@@ -108,6 +114,12 @@ const Home = (props) => {
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
           <WelcomeBar userName={name} />
+        </section>
+        <section>
+          <QRCodeReader
+            onScanQrCode={handleScanChange}
+            size="UserStyle"
+          ></QRCodeReader>
         </section>
         <section>
           <Card currentStamps={currentStamps}></Card>

@@ -163,7 +163,10 @@ class Admin extends Component {
           <h3>Add stamps below:</h3>
         </section>
         <section>
-          <QRCodeReader onScanQrCode={this.handleScanChange} />
+          <QRCodeReader
+            onScanQrCode={this.handleScanChange}
+            size="AdminStyle"
+          />
         </section>
         <section className="FormContainer">
           {addStampForm}
