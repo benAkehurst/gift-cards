@@ -97,26 +97,21 @@ const Home = (props) => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
       <div className="Home">
-        {isLoading && <Spinner size="large"></Spinner>}
-        {isError && (
-          <Error errorText="Something went wrong... Resetting App..." />
-        )}
+        {isLoading && <Spinner size="large" />}
+        {isError && <Error errorText={AppConfig.GENERAL_APP_ERROR} />}
         <section className="Header">
           <Banner>{AppConfig.APP_NAME}</Banner>
           <WelcomeBar userName={name} />
         </section>
         <section>
-          <QRCodeReader
-            onScanQrCode={handleScanChange}
-            size="UserStyle"
-          ></QRCodeReader>
+          <QRCodeReader onScanQrCode={handleScanChange} size="UserStyle" />
         </section>
         <section>
-          <Card currentStamps={currentStamps}></Card>
+          <Card currentStamps={currentStamps} />
         </section>
         <section className="Controls">
           <Button
-            btnType={'General'}
+            btnType="General"
             clicked={() => goToAccountHandler('account')}
           >
             Account
