@@ -1,6 +1,10 @@
 'use strict';
 module.exports = (app) => {
   const adminController = require('../controllers/admin.controller');
+  app.route('/api/v1/admin/add_new_store').post(adminController.add_new_store);
+  app
+    .route('/api/v1/admin/add-access-code/:storeId/:uniqueId')
+    .get(adminController.add_access_code);
   app
     .route('/api/v1/admin/get-all-users/:storeId/:uniqueId')
     .get(adminController.get_all_users);

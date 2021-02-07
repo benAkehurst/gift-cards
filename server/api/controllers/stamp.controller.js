@@ -4,6 +4,7 @@ const { format, addMinutes } = require('date-fns');
 const { v4: uuidv4 } = require('uuid');
 const { checkToken } = require('../../middlewares/validators');
 const User = mongoose.model('User');
+const Access = mongoose.model('Access');
 
 /**
  * Method to add stamp to user
@@ -161,4 +162,18 @@ exports.add_stamp = async (req, res) => {
       });
     }
   }
+};
+
+/**
+ * Method allows a customer to add a stamp to their card by scanning a qr code from an employee
+ * POST
+ * Params - /:accessCode/:customerId/:token
+ */
+exports.add_stamp_from_customer = async (req, res) => {
+  /**
+   * LOGIC
+   * 1. check user is valid
+   * 2. check access code is valid
+   * 3. add 1 stamp to user like in add stamp method
+   */
 };

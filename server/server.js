@@ -13,6 +13,7 @@ const Code = require('./api/models/code.model');
 const Stamp = require('./api/models/stamp.model');
 const Store = require('./api/models/store.model');
 const User = require('./api/models/user.model');
+const Access = require('./api/models/access.model');
 
 // Init Express
 const app = express();
