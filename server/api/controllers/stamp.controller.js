@@ -174,6 +174,7 @@ exports.add_stamp_from_customer = async (req, res) => {
    * LOGIC
    * 1. check user is valid
    * 2. check access code is valid
-   * 3. add 1 stamp to user like in add stamp method
+   * 3. check if a stamp has been added in the last hour
+   * 4. add 1 stamp to user like in add stamp method
    */
 };
