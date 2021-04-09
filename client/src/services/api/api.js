@@ -11,22 +11,18 @@ export const checkUserLoggedIn = () => {
   let tokenExists = localStorage.getItem('token');
   if (!tokenExists) {
     return false;
-  } else if (!checkTokenValid(tokenExists)) {
-    return false;
-  } else {
+  } else if (checkTokenValid(tokenExists)) {
     return true;
+  } else {
+    return false;
   }
 };
 
 export const checkTokenValid = (token) => {
   return axios
     .get(`${BASE_URL}/api/v1/auth/check-token-valid-external/${token}`)
-    .then((response) => {
-      return response.data.data.success;
-    })
-    .catch((error) => {
-      return error.response;
-    });
+    .then(() => true)
+    .catch(() => false);
 };
 
 export const login = (loginObject) => {
@@ -85,7 +81,9 @@ export const fetchUserInfo = () => {
   return axios
     .get(`${BASE_URL}/api/v1/user/fetch-user-info/${uniqueId}`)
     .then((response) => {
-      return response.data;
+      if (response.status === 200) {
+        return response.data;
+      }
     })
     .catch((error) => {
       return error.response;
