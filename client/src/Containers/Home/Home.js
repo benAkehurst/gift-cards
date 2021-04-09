@@ -4,7 +4,7 @@ import '../../globals.scss';
 import axios from '../../axios-connector';
 import * as AppConfig from '../../config/AppConfig';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { fetchUserInfo, checkUserLoggedIn } from '../../services/api/api';
+import { fetchUserInfo } from '../../services/api/api';
 
 import WelcomeBar from '../../components/UI/WelcomeBar/WelcomeBar';
 import Banner from '../../components/UI/Banner/Banner';
@@ -28,9 +28,6 @@ const Home = (props) => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    if (!checkUserLoggedIn()) {
-      history.push({ pathname: '/auth' });
-    }
     setIsLoading(true);
     fetchUserInfo()
       .then((res) => {
