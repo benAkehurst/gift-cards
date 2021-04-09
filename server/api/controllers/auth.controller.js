@@ -8,7 +8,6 @@ const sanitize = require('mongo-sanitize');
 const {
   checkEmailExists,
   validateEmail,
-  checkToken,
 } = require('../../middlewares/validators');
 const { generateQRCode } = require('../../middlewares/QRCodeUtils');
 const { sendEmail } = require('../../middlewares/utils/emailService');
@@ -454,30 +453,15 @@ exports.check_token_valid_external = async (req, res) => {
   if (!token) {
     res.status(400).json({
       success: false,
-      message: 'Incorrect Request Parameters',
-      data: null,
+      message: 'Please provide your token',
     });
-  }
-  try {
-    let tokenValid = await checkToken(token);
-    if (!tokenValid) {
-      res.status(400).json({
-        success: false,
-        message: 'Token Not Valid',
-        data: null,
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: 'Token Valid',
-        data: null,
-      });
-    }
-  } catch {
-    res.status(500).json({
-      success: false,
-      message: 'Oh, something went wrong checking token. Please try again!',
-      data: null,
+  } else {
+    jwt.verify(token, process.env.JWT_SECRET, (err) => {
+      if (err) {
+        res.status(400).json({ success: false });
+      } else {
+        res.status(200).json({ success: true });
+      }
     });
   }
 };
