@@ -7,24 +7,6 @@ import {
 
 const BASE_URL = 'http://localhost:5000';
 
-export const checkUserLoggedIn = () => {
-  let tokenExists = localStorage.getItem('token');
-  if (!tokenExists) {
-    return false;
-  } else if (checkTokenValid(tokenExists)) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-export const checkTokenValid = (token) => {
-  return axios
-    .get(`${BASE_URL}/api/v1/auth/check-token-valid-external/${token}`)
-    .then(() => true)
-    .catch(() => false);
-};
-
 export const login = (loginObject) => {
   const loginData = {
     email: loginObject.email,
@@ -76,17 +58,45 @@ export const logout = () => {
   localStorage.clear();
 };
 
-export const fetchUserInfo = () => {
-  const uniqueId = localStorage.getItem('id');
+export const fetchUserInfo = async () => {
+  const userAuth = await checkUserLoggedIn();
+  if (!userAuth) {
+    return false;
+  } else {
+    const uniqueId = localStorage.getItem('id');
+    return axios
+      .get(`${BASE_URL}/api/v1/user/fetch-user-info/${uniqueId}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
+};
+
+export const checkUserLoggedIn = async () => {
+  let tokenExists = localStorage.getItem('token');
+  let tokenValid = await checkTokenValid(tokenExists);
+  if (!tokenExists) {
+    return false;
+  } else if (!tokenValid) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const checkTokenValid = (token) => {
   return axios
-    .get(`${BASE_URL}/api/v1/user/fetch-user-info/${uniqueId}`)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data;
-      }
+    .get(`${BASE_URL}/api/v1/auth/check-token-valid-external/${token}`)
+    .then((res) => {
+      return true;
     })
-    .catch((error) => {
-      return error.response;
+    .catch((err) => {
+      return false;
     });
 };
 
