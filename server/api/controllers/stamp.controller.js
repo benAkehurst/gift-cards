@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const { format, addMinutes } = require('date-fns');
 const { v4: uuidv4 } = require('uuid');
-const { checkToken } = require('../../middlewares/validators');
+const { checkToken } = require('../../services/validatorsService');
 const User = mongoose.model('User');
 
 /**

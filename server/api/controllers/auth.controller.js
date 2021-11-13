@@ -9,9 +9,9 @@ const {
   checkEmailExists,
   validateEmail,
   checkToken,
-} = require('../../middlewares/validators');
-const { generateQRCode } = require('../../middlewares/QRCodeUtils');
-const { sendEmail } = require('../../middlewares/utils/emailService');
+} = require('../../services/validatorsService');
+const { generateQRCode } = require('../../services/QRCodeService');
+const { sendEmail } = require('../../services/emailService');
 const User = require('../models/user.model');
 const Code = require('../models/code.model');
 const { OAuth2Client } = require('google-auth-library');
@@ -95,14 +95,8 @@ exports.login_user = async (req, res) => {
  * }
  */
 exports.create_new_user = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    password2,
-    acceptedTerms,
-  } = req.body;
+  const { firstName, lastName, email, password, password2, acceptedTerms } =
+    req.body;
   const emailCheck = await checkEmailExists(email);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.status(400).json({
