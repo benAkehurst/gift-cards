@@ -3,178 +3,143 @@ module.exports = {
     schemas: {
       // User Model
       user: {
-        type: "object",
+        type: 'object',
         properties: {
           firstName: {
-            type: "string",
+            type: 'string',
             description: "User's first name.",
-            example: "John",
+            example: 'John',
           },
           lastName: {
-            type: "string",
+            type: 'string',
             description: "User's last name.",
-            example: "Doe",
+            example: 'Doe',
           },
           email: {
-            type: "string",
+            type: 'string',
             description: "User's email address.",
-            example: "john@doe.com",
+            example: 'john@doe.com',
           },
           password: {
-            type: "string",
+            type: 'string',
             description:
-              "Password for user account. password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.",
-            example: "Abc123!@",
+              'Password for user account. password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.',
+            example: 'Abc123!@',
           },
           acceptedTerms: {
-            type: "boolean",
+            type: 'boolean',
             description: "Confirms the user accepts t's & c's on sign up.",
-            example: "true",
+            example: 'true',
           },
           createdOnDate: {
-            type: "boolean",
+            type: 'boolean',
             description:
-              "A human readable format of the date the user was created.",
-            example: "12/11/2021",
+              'A human readable format of the date the user was created.',
+            example: '12/11/2021',
+          },
+          customerId: {
+            type: 'string',
+            description:
+              'A unique code used to add stamp if the user qr code doesnt work.',
+            example: '_ur1s4psp',
           },
           userUID: {
-            type: "string",
-            description: "A UUID for the user object.",
-            example: "8eac14c0-83b4-46f7-a9ef-bef5ded8997f",
+            type: 'string',
+            description: 'A UUID for the user object.',
+            example: '8eac14c0-83b4-46f7-a9ef-bef5ded8997f',
           },
-          userAcquisitionLocation: {
-            type: "string",
-            description:
-              "Defines where the user opened their account, via the sign up form or using goolge credentials.",
-            example: "Manual Registration Form",
+          qrCode: {
+            type: 'string',
+            description: 'A QR Code image encoded in base64.',
+            example:
+              'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAK9SURBVO3BQW7kQAwEwSxC//9yro88NSBIM2sTjIg/WGMUa5RijVKsUYo1SrFGKdYoxRqlWKMUa5RijVKsUYo1SrFGKdYoxRrl4qEkfJPKHUnoVO5IwjepPFGsUYo1SrFGuXiZypuScJKETqVT6ZLQqdyh8qYkvKlYoxRrlGKNcvFhSbhD5Q6VLgnflIQ7VD6pWKMUa5RijVKsUYo1SrFGKdYoF39cEjqVO5LQqfxlxRqlWKMUa5SLD1P5JJUuCScqb1L5TYo1SrFGKdYoFy9LwjcloVPpkvCmJPxmxRqlWKMUa5T4g0GS0Kl0SThR+cuKNUqxRinWKBcPJaFT6ZLQqXRJ6FS6JHQqJypdEk5UnkhCp3KShE7lTcUapVijFGuUiy9LwkkSOpWTJHQqJyonSehU3qTSJaFTeaJYoxRrlGKNcvGQyolKl4ROpUtCl4ROpVN5Igl3JOEkCf9TsUYp1ijFGuXioSR0KicqXRJOVE6ScKJyovKEyhNJeFOxRinWKMUa5eJlSThRuSMJJypPJOFEpVPpknCi0iWhU3lTsUYp1ijFGuXiIZUnVJ5IQqdykoROpUvCJ6l8UrFGKdYoxRrl4qEkfJNKp3KShDtUuiTcoXKShBOVJ4o1SrFGKdYoFy9TeVMS7khCp9IloUvCiUqXhE6lS0Kn0ql8UrFGKdYoxRrl4sOScIfKHUnoVO5QOUnCSRJ+k2KNUqxRijXKxR+n0iXhROUJlS4JdyShU3lTsUYp1ijFGuXij0vCE0noVDqVJ5LQqXRJ6FSeKNYoxRqlWKNcfJjKJ6l0SehUTlROktCpnKicJKFTeVOxRinWKMUa5eJlSfimJDyRhE7liSR0KidJ6FSeKNYoxRqlWKPEH6wxijVKsUYp1ijFGqVYoxRrlGKNUqxRijVKsUYp1ijFGqVYoxRrlGKN8g8Z7xTx+lBJBQAAAABJRU5ErkJggg==',
           },
-          trackedItems: {
-            type: "array",
-            description: "Array of object ids of items the user is tracking.",
-            example: "[]",
+          current_stamps: {
+            type: 'number',
+            description: 'Number of current stamps the user has.',
+            example: '0',
+          },
+          completed_cards: {
+            type: 'array',
+            description: 'Record of completed cards.',
+            example: '[]',
+          },
+          transactions: {
+            type: 'array',
+            description: 'Record of completed transactions.',
+            example: '[]',
           },
           isAdmin: {
-            type: "boolean",
-            description: "Defines if the user is an admin.",
-            example: "false",
+            type: 'boolean',
+            description: 'Defines if the user is an admin.',
+            example: 'false',
           },
           userActive: {
-            type: "boolean",
-            description: "Defines if the user confirmed their email address.",
-            example: "false",
+            type: 'boolean',
+            description: 'Defines if the user confirmed their email address.',
+            example: 'false',
           },
-        },
-      },
-      // Item Model
-      singleItem: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-            description: "Item name.",
-            example: "Samsung-LC32R500FHRXXU-Curved-FullHD-Monitor",
-          },
-          link: {
-            type: "string",
-            description: "Valid Amazon url of item.",
-            example:
-              "https://www.amazon.co.uk/Samsung-LC32R500FHRXXU-Curved-FullHD-Monitor/dp/B08WXCZT4Y",
-          },
-          imgUrl: {
-            type: "string",
-            description: "Scraped url for main image url.",
-            example:
-              "https://m.media-amazon.com/images/I/81kfNKhZp+L._AC_SX300_SY300_.jpg",
-          },
-          currentPrice: {
-            type: "number",
+          userAcquisitionLocation: {
+            type: 'string',
             description:
-              "Current item price rounded to the nearest whole number.",
-            example: "179",
-          },
-          targetPrice: {
-            type: "number",
-            description:
-              "A user defined number the user would like to pay for the item.",
-            example: "175",
-          },
-          asin: {
-            type: "string",
-            description: "Amazon SKU.",
-            example: "B08WXCZT4Y",
-          },
-          rating: {
-            type: "string",
-            description: "Current rating.",
-            example: "4.5 out of 5 stars",
-          },
-          following: {
-            type: "boolean",
-            description:
-              "Tracks if the user is tracking the price and the item price is being updated.",
-            example: "true",
-          },
-          pastPrices: {
-            type: "array",
-            description:
-              "Holds a record of past prices. This array is updated each time the item price is updated.",
-            example: "[{time: 1636729931796, pastPrice: 179}]",
+              'Defines where the user opened their account, via the sign up form or using goolge credentials.',
+            example: 'Manual Registration Form',
           },
         },
       },
       loginInput: {
-        type: "object",
+        type: 'object',
         properties: {
           email: {
-            type: "string",
-            description: "user email",
-            example: "john@doe.com",
+            type: 'string',
+            description: 'user email',
+            example: 'john@doe.com',
           },
           password: {
-            type: "string",
-            description: "user password",
-            example: "Abc123!@",
+            type: 'string',
+            description: 'user password',
+            example: 'Abc123!@',
           },
           rememberMe: {
-            type: "boolean",
-            description: "Defines if user is to remain logged in",
-            example: "true",
+            type: 'boolean',
+            description: 'Defines if user is to remain logged in',
+            example: 'true',
           },
         },
       },
       createUser: {
-        type: "object",
+        type: 'object',
         properties: {
           firstName: {
-            type: "string",
+            type: 'string',
             description: "User's first name.",
-            example: "John",
+            example: 'John',
           },
           lastName: {
-            type: "string",
+            type: 'string',
             description: "User's last name.",
-            example: "Doe",
+            example: 'Doe',
           },
           email: {
-            type: "string",
+            type: 'string',
             description: "User's email address.",
-            example: "john@doe.com",
+            example: 'john@doe.com',
           },
           password: {
-            type: "string",
+            type: 'string',
             description:
-              "Password for user account. password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.",
-            example: "Abc123!@",
+              'Password for user account. password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.',
+            example: 'Abc123!@',
           },
           password2: {
-            type: "string",
-            description: "A repeat of the first password",
-            example: "Abc123!@",
+            type: 'string',
+            description: 'A repeat of the first password',
+            example: 'Abc123!@',
           },
           acceptedTerms: {
-            type: "boolean",
+            type: 'boolean',
             description: "Confirms the user accepts t's & c's on sign up.",
-            example: "true",
+            example: 'true',
           },
         },
       },

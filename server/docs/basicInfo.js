@@ -1,11 +1,11 @@
 module.exports = {
-  openapi: "3.0.3",
+  openapi: '3.0.3',
   info: {
-    title: "APC Nodejs API",
-    description: "Services for APC",
-    version: "1.0.0",
+    title: 'Gift Cards Nodejs API',
+    description: 'Services for Gift Cards API',
+    version: '1.0.0',
     contact: {
-      name: "Ben Akehurst",
+      name: 'Ben Akehurst',
     },
   },
 };

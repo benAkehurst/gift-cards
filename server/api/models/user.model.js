@@ -29,7 +29,7 @@ const UserSchema = new Schema(
     customerId: {
       type: String,
     },
-    uniqueId: {
+    userUID: {
       type: String,
       required: false,
     },
