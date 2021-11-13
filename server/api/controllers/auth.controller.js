@@ -37,41 +37,40 @@ exports.login_user = async (req, res) => {
     });
   } else {
     try {
-      const user = await User.findOne({ email: sanitize(email) });
+      let user = await User.findOne({
+        email: sanitize(email.trim().toLowerCase()),
+      });
       if (!user) {
         res.status(400).json({
           success: false,
           message: 'The provided email is not registered.',
           data: err,
         });
-      } else {
-        const pwCheckSuccess = await bcrypt.compare(password, user.password);
-        if (!pwCheckSuccess) {
-          res.status(400).json({
-            success: false,
-            message: 'Email and password do not match.',
-            data: err,
-          });
-        } else {
-          let token = jwt.sign(
-            { username: user.uniqueId },
-            process.env.JWT_SECRET,
-            {
-              // TODO: SET JWT TOKEN DURATION HERE
-              expiresIn: rememberMe ? '48h' : '1h',
-            }
-          );
-          let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
-          userFiltered.token = token;
-          res.status(200).json({
-            success: true,
-            message: 'Successfully logged in',
-            data: userFiltered,
-          });
-        }
       }
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        res.status(400).json({
+          success: false,
+          message: 'Email and password do not match.',
+          data: err,
+        });
+      }
+      let token = jwt.sign({ id: user.userUID }, process.env.JWT_SECRET);
+      let userFiltered = _.pick(user.toObject(), [
+        'firstName',
+        'customerId',
+        'uniqueId',
+        'qrCode',
+        'current_stamps',
+      ]);
+      userFiltered.token = token;
+      res.status(200).json({
+        success: true,
+        message: 'Successfully logged in',
+        data: userFiltered,
+      });
     } catch {
-      res.status(400).json({
+      res.status(500).json({
         success: false,
         message: 'Something went wrong.',
         data: null,
