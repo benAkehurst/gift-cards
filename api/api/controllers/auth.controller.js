@@ -1,83 +1,23 @@
-const bcrypt = require('bcryptjs');
-const _ = require('lodash');
-const jwt = require('jsonwebtoken');
-const cryptoRandomString = require('crypto-random-string');
-const { format } = require('date-fns');
-const { v4: uuidv4 } = require('uuid');
-const sanitize = require('mongo-sanitize');
+const bcrypt = require("bcryptjs");
+const _ = require("lodash");
+const jwt = require("jsonwebtoken");
+const cryptoRandomString = require("crypto-random-string");
+const { format } = require("date-fns");
+const { v4: uuidv4 } = require("uuid");
+const sanitize = require("mongo-sanitize");
 const {
   checkEmailExists,
   validateEmail,
+  validatePassword,
   checkToken,
-} = require('../../services/validatorsService');
-const { generateQRCode } = require('../../services/QRCodeService');
-const { sendEmail } = require('../../services/emailService');
-const User = require('../models/user.model');
-const Code = require('../models/code.model');
-const { OAuth2Client } = require('google-auth-library');
-const { async } = require('crypto-random-string');
+} = require("../../services/validatorsService");
+const { generateQRCode } = require("../../services/QRCodeService");
+const { sendEmail } = require("../../services/emailService");
+const User = require("../models/user.model");
+const Code = require("../models/code.model");
+const { OAuth2Client } = require("google-auth-library");
+const { async } = require("crypto-random-string");
 const client = new OAuth2Client(process.env.CLIENT_ID);
-
-/**
- * Logs a user in
- * POST:
- * {
- *  "email": "",
- *  "password": "",
- *  "rememberMe": boolean
- * }
- */
-exports.login_user = async (req, res) => {
-  const { email, password, rememberMe } = req.body;
-  if (!email || !password) {
-    res.status(400).json({
-      success: false,
-      message: 'Please fill in all fields!',
-      data: null,
-    });
-  } else {
-    try {
-      let user = await User.findOne({
-        email: sanitize(email.trim().toLowerCase()),
-      });
-      if (!user) {
-        res.status(400).json({
-          success: false,
-          message: 'The provided email is not registered.',
-          data: err,
-        });
-      }
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) {
-        res.status(400).json({
-          success: false,
-          message: 'Email and password do not match.',
-          data: err,
-        });
-      }
-      let token = jwt.sign({ id: user.userUID }, process.env.JWT_SECRET);
-      let userFiltered = _.pick(user.toObject(), [
-        'firstName',
-        'customerId',
-        'uniqueId',
-        'qrCode',
-        'current_stamps',
-      ]);
-      userFiltered.token = token;
-      res.status(200).json({
-        success: true,
-        message: 'Successfully logged in',
-        data: userFiltered,
-      });
-    } catch {
-      res.status(500).json({
-        success: false,
-        message: 'Something went wrong.',
-        data: null,
-      });
-    }
-  }
-};
 
 /**
  * Creates a new user object in the DB
@@ -100,68 +40,66 @@ exports.create_new_user = async (req, res) => {
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.status(400).json({
       success: false,
-      message: 'Please provide all required fields',
+      message: "Please provide all required fields",
       data: null,
     });
   } else if (!email || !password || !password2) {
     res.status(400).json({
       success: false,
-      message: 'Please provide all required fields',
+      message: "Please provide all required fields",
       data: null,
     });
-  } else if (password != password2) {
+  } else if (password !== password2) {
     res.status(400).json({
       success: false,
-      message: 'The entered passwords do not match!',
+      message: "The entered passwords do not match!",
       data: null,
     });
-  } else if (
-    !password.match(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/
-    )
-  ) {
+  } else if (!validatePassword(password)) {
     res.status(400).json({
       success: false,
       message:
-        'Your password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.',
+        "Your password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.",
       data: null,
     });
   } else if (!acceptedTerms) {
     res.status(400).json({
       success: false,
-      message: 'You need to accept the terms of use.',
+      message: "You need to accept the terms of use.",
       data: null,
     });
   } else if (!validateEmail(email)) {
     res.status(400).json({
       success: false,
-      message: 'Email address has invalid format',
+      message: "Email address has invalid format",
       data: null,
     });
   } else if (!emailCheck) {
     res.status(400).json({
       success: false,
-      message: 'Error creating user',
+      message: "Error creating user",
       data: null,
     });
   } else {
+    const randomString = cryptoRandomString({ length: 6 });
     try {
-      const customerId = `_${Math.random().toString(36).substr(2, 8)}`;
+      const customerId = `_${randomString}`;
       const generatedQrCode = await generateQRCode(customerId);
       const newUser = new User({
-        firstName: firstName ? firstName : '',
-        lastName: lastName ? lastName : '',
+        firstName: firstName ? firstName : "",
+        lastName: lastName ? lastName : "",
         email: email,
         password: bcrypt.hashSync(req.body.password, 14),
-        acceptedTerms: true,
-        createdOnDate: format(new Date(), 'dd/MM/yyyy'),
+        acceptedTerms: acceptedTerms,
+        createdOnDate: format(new Date(), "dd/MM/yyyy"),
         uniqueId: uuidv4(),
-        qrCode: generatedQrCode,
+        userActive: false,
+        userAcquisitionLocation: "Registration Form",
         customerId: customerId,
-        userAcquisitionLocation: 'Registration Form',
+        qrCode: generatedQrCode,
       });
       const user = await newUser.save();
-      const baseUrl = req.protocol + '://' + req.get('host');
+      const baseUrl = req.protocol + "://" + req.get("host");
       const secretCode = cryptoRandomString({
         length: 6,
       });
@@ -173,7 +111,7 @@ exports.create_new_user = async (req, res) => {
       const data = {
         from: `YOUR NAME <${process.env.EMAIL_USERNAME}>`,
         to: user.email,
-        subject: 'Your Activation Link for YOUR APP',
+        subject: "Your Activation Link for YOUR APP",
         text: `Please use the following link within the next 10 minutes to activate your account on YOUR APP: ${baseUrl}/api/auth/verification/verify-account/${user.uniqueId}/${secretCode}`,
         html: `<p>Please use the following link within the next 10 minutes to activate your account on YOUR APP: <strong><a href="${baseUrl}/api/v1/auth/verification/verify-account/${user.uniqueId}/${secretCode}" target="_blank">Email Verification Link</a></strong></p>`,
       };
@@ -183,20 +121,81 @@ exports.create_new_user = async (req, res) => {
         process.env.JWT_SECRET,
         {
           // TODO: SET JWT TOKEN DURATION HERE
-          expiresIn: '48h',
+          expiresIn: "48h",
         }
       );
-      let userFiltered = _.pick(user.toObject(), ['uniqueId', 'isAdmin']);
+      let userFiltered = _.pick(user.toObject(), ["firstName", "uniqueId"]);
       userFiltered.token = token;
       res.status(201).json({
         success: true,
-        message: 'User created',
+        message: "User created",
         data: userFiltered,
       });
     } catch {
       res.status(400).json({
         success: false,
-        message: 'General Error Creating new account',
+        message: "General Error Creating new account",
+        data: null,
+      });
+    }
+  }
+};
+
+/**
+ * Logs a user in
+ * POST:
+ * {
+ *  "email": "",
+ *  "password": "",
+ *  "rememberMe": boolean
+ * }
+ */
+exports.login_user = async (req, res) => {
+  const { email, password, rememberMe } = req.body;
+  if (!email || !password) {
+    res.status(400).json({
+      success: false,
+      message: "Please fill in all fields!",
+      data: null,
+    });
+  } else {
+    try {
+      let user = await User.findOne({
+        email: sanitize(email.trim().toLowerCase()),
+      });
+      if (!user) {
+        res.status(400).json({
+          success: false,
+          message: "The provided email is not registered.",
+          data: err,
+        });
+      }
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        res.status(400).json({
+          success: false,
+          message: "Email and password do not match.",
+          data: err,
+        });
+      }
+      let token = jwt.sign({ id: user.userUID }, process.env.JWT_SECRET);
+      let userFiltered = _.pick(user.toObject(), [
+        "firstName",
+        "customerId",
+        "uniqueId",
+        "qrCode",
+        "current_stamps",
+      ]);
+      userFiltered.token = token;
+      res.status(200).json({
+        success: true,
+        message: "Successfully logged in",
+        data: userFiltered,
+      });
+    } catch {
+      res.status(500).json({
+        success: false,
+        message: "Something went wrong.",
         data: null,
       });
     }
@@ -223,14 +222,14 @@ exports.validate_user_email_and_account = async (req, res) => {
     } else {
       await User.updateOne(
         { email: user.email },
-        { $set: { userStatus: 'active', userActive: true } }
+        { $set: { userStatus: "active", userActive: true } }
       );
       await Code.deleteMany({ email: user.email });
 
       let redirectPath;
 
-      if (process.env.NODE_ENV == 'production') {
-        redirectPath = `${req.protocol}://${req.get('host')}account/verified`;
+      if (process.env.NODE_ENV == "production") {
+        redirectPath = `${req.protocol}://${req.get("host")}account/verified`;
       } else {
         redirectPath = `http://127.0.0.1:8080/account/verified`;
       }
@@ -238,7 +237,7 @@ exports.validate_user_email_and_account = async (req, res) => {
       res.redirect(redirectPath);
     }
   } catch (err) {
-    console.log('Error on /api/auth/verification/verify-account: ', err);
+    console.log("Error on /api/auth/verification/verify-account: ", err);
     res.sendStatus(500);
   }
 };
@@ -256,7 +255,7 @@ exports.get_reset_password_code = async (req, res) => {
   if (!email) {
     res.status(400).json({
       success: false,
-      message: 'Please provide your registered email address!',
+      message: "Please provide your registered email address!",
       data: null,
     });
   } else {
@@ -266,7 +265,7 @@ exports.get_reset_password_code = async (req, res) => {
       if (!user) {
         res.status(400).json({
           success: false,
-          message: 'The provided email address is not registered!',
+          message: "The provided email address is not registered!",
           data: null,
         });
       } else {
@@ -281,21 +280,21 @@ exports.get_reset_password_code = async (req, res) => {
         const data = {
           from: `YOUR NAME <${process.env.EMAIL_USERNAME}>`,
           to: email,
-          subject: 'Your Password Reset Code for YOUR APP',
+          subject: "Your Password Reset Code for YOUR APP",
           text: `Please use the following code within the next 10 minutes to reset your password on YOUR APP: ${secretCode}`,
           html: `<p>Please use the following code within the next 10 minutes to reset your password on YOUR APP: <strong>${secretCode}</strong></p>`,
         };
         await sendEmail(data);
         res.status(201).json({
           success: true,
-          message: 'Code send successfully',
+          message: "Code send successfully",
           data: null,
         });
       }
     } catch (err) {
       res.status(400).json({
         success: false,
-        message: 'Something went wrong getting a code to reset email',
+        message: "Something went wrong getting a code to reset email",
         data: null,
       });
     }
@@ -318,13 +317,13 @@ exports.verify_new_user_password = async (req, res) => {
   if (!email || !password || !password2 || !code) {
     res.status(400).json({
       success: false,
-      message: 'Please fill in all fields!',
+      message: "Please fill in all fields!",
       data: null,
     });
   } else if (password !== password2) {
     res.status(400).json({
       success: false,
-      message: 'The entered passwords do not match!',
+      message: "The entered passwords do not match!",
       data: null,
     });
   } else if (
@@ -335,7 +334,7 @@ exports.verify_new_user_password = async (req, res) => {
     res.status(400).json({
       success: false,
       message:
-        'Your password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.',
+        "Your password must be at least 6 characters long and contain a lowercase letter, an uppercase letter, a numeric digit and a special character.",
       data: null,
     });
   } else {
@@ -345,7 +344,7 @@ exports.verify_new_user_password = async (req, res) => {
         res.status(400).json({
           success: false,
           message:
-            'The entered code is not correct. Please make sure to enter the code in the requested time interval.',
+            "The entered code is not correct. Please make sure to enter the code in the requested time interval.",
           data: null,
         });
       } else {
@@ -357,14 +356,14 @@ exports.verify_new_user_password = async (req, res) => {
         await Code.deleteOne({ email, code });
         res.status(200).json({
           success: true,
-          message: 'Password reset successfully',
+          message: "Password reset successfully",
           data: null,
         });
       }
     } catch (err) {
       res.status(400).json({
         success: false,
-        message: 'Something went wrong, please try again',
+        message: "Something went wrong, please try again",
         data: null,
       });
     }
@@ -385,7 +384,7 @@ exports.delete_user_account = async (req, res) => {
   if (!password) {
     res.status(400).json({
       success: false,
-      message: 'Please provide your password',
+      message: "Please provide your password",
       data: null,
     });
   } else {
@@ -394,7 +393,7 @@ exports.delete_user_account = async (req, res) => {
       if (!user) {
         res.status(400).json({
           success: false,
-          message: 'Oh, something went wrong. Please try again!',
+          message: "Oh, something went wrong. Please try again!",
           data: null,
         });
       } else {
@@ -403,7 +402,7 @@ exports.delete_user_account = async (req, res) => {
         if (!pwCheckSuccess) {
           res.status(400).json({
             success: false,
-            message: 'The provided password is not correct.',
+            message: "The provided password is not correct.",
             data: null,
           });
         } else {
@@ -414,23 +413,23 @@ exports.delete_user_account = async (req, res) => {
           if (!deleted) {
             res.status(400).json({
               success: false,
-              message: 'Oh, something went wrong. Please try again!',
+              message: "Oh, something went wrong. Please try again!",
               data: null,
             });
           } else {
             res.status(200).json({
               success: true,
-              message: 'Account deleted successfully',
+              message: "Account deleted successfully",
               data: null,
             });
           }
         }
       }
     } catch (err) {
-      console.log('Error on /api/auth/delete-account: ', err);
+      console.log("Error on /api/auth/delete-account: ", err);
       res.status(400).json({
         success: false,
-        message: 'Oh, something went wrong. Please try again!',
+        message: "Oh, something went wrong. Please try again!",
         data: null,
       });
     }
@@ -447,7 +446,7 @@ exports.check_token_valid_external = async (req, res) => {
   if (!token) {
     res.status(400).json({
       success: false,
-      message: 'Incorrect Request Parameters',
+      message: "Incorrect Request Parameters",
       data: null,
     });
   }
@@ -456,20 +455,20 @@ exports.check_token_valid_external = async (req, res) => {
     if (!tokenValid) {
       res.status(400).json({
         success: false,
-        message: 'Token Not Valid',
+        message: "Token Not Valid",
         data: null,
       });
     } else {
       res.status(200).json({
         success: true,
-        message: 'Token Valid',
+        message: "Token Valid",
         data: null,
       });
     }
   } catch {
     res.status(500).json({
       success: false,
-      message: 'Oh, something went wrong checking token. Please try again!',
+      message: "Oh, something went wrong checking token. Please try again!",
       data: null,
     });
   }
@@ -483,7 +482,7 @@ exports.googleLogin = async (req, res) => {
   if (!token || !requestLocation) {
     res.status(400).json({
       success: false,
-      message: 'Incorrect Request Parameters',
+      message: "Incorrect Request Parameters",
       data: null,
     });
   }
@@ -496,7 +495,7 @@ exports.googleLogin = async (req, res) => {
     const { sub, name, email, picture } = payload;
     const userId = sub;
     const user = { userId, email, fullName: name, photoUrl: picture };
-    if (requestLocation === 'register') {
+    if (requestLocation === "register") {
       let createUser = await createUserFromGoogleRegister(
         user.userId,
         user.email,
@@ -505,19 +504,19 @@ exports.googleLogin = async (req, res) => {
       if (!createUser) {
         res
           .status(400)
-          .json({ message: 'Email already exists, try logging in' });
+          .json({ message: "Email already exists, try logging in" });
       } else {
-        res.status(201).json({ message: 'Please Login', data: createUser });
+        res.status(201).json({ message: "Please Login", data: createUser });
       }
-    } else if (requestLocation === 'login') {
+    } else if (requestLocation === "login") {
       let loginUser = await loginUserViaGoogleLogin(user.userId, user.email);
-      res.status(201).json({ message: 'Login Successful', data: loginUser });
+      res.status(201).json({ message: "Login Successful", data: loginUser });
     }
   } catch {
     res.status(500).json({
       success: false,
       message:
-        'Oh, something went wrong doing auth with Google. Please try again!',
+        "Oh, something went wrong doing auth with Google. Please try again!",
       data: null,
     });
   }
@@ -537,16 +536,16 @@ const createUserFromGoogleRegister = async (userId, email, name) => {
     const customerId = `_${Math.random().toString(36).substr(2, 8)}`;
     const generatedQrCode = await generateQRCode(customerId);
     const newUser = new User({
-      firstName: name ? name : '',
+      firstName: name ? name : "",
       email: email,
       password: bcrypt.hashSync(userId, 14),
       acceptedTerms: true,
-      createdOnDate: format(new Date(), 'dd/MM/yyyy'),
+      createdOnDate: format(new Date(), "dd/MM/yyyy"),
       uniqueId: uuidv4(),
       qrCode: generatedQrCode,
       customerId: customerId,
       userActive: true,
-      userAcquisitionLocation: 'Google',
+      userAcquisitionLocation: "Google",
     });
     const user = await newUser.save();
     return user;
@@ -572,7 +571,7 @@ const loginUserViaGoogleLogin = async (userId, email) => {
         process.env.JWT_SECRET,
         {
           // TODO: SET JWT TOKEN DURATION HERE
-          expiresIn: '48h',
+          expiresIn: "48h",
         }
       );
       let userFiltered = { uniqueId: user.uniqueId, isAdmin: user.isAdmin };
