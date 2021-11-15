@@ -83,6 +83,7 @@ exports.remove_store = async (req, res) => {
   } else {
     try {
       const store = await Store.findById(storeId);
+      const storeAdmin = await StoreAdmin.findById(store.storeAdmin);
       if (!store) {
         res.status(404).json({
           success: false,
@@ -91,6 +92,7 @@ exports.remove_store = async (req, res) => {
         });
       } else {
         await store.remove();
+        await storeAdmin.remove();
         res.status(200).json({
           success: true,
           message: 'Store removed',
