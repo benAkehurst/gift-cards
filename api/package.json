@@ -4,7 +4,7 @@
   "description": "boilerplate nodejs/mongodb server database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watchAll",
     "start": "nodemon server.js",
     "reset": "rm -rf node_modules",
     "reinstall": "rm -rf node_modules && npm i",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/benAkehurst/nodejs-api-server#readme",
   "devDependencies": {
+    "jest": "^27.3.1",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
