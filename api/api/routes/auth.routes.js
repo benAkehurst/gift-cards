@@ -15,7 +15,7 @@ module.exports = (app) => {
     .route("/api/v2/auth/password-reset/verify-code")
     .post(authController.verify_new_user_password);
   app
-    .route("/api/v2/auth/delete-account")
+    .route("/api/v2/auth/delete-account/:token")
     .delete(authController.delete_user_account);
   app.route("/api/v2/auth/google").post(authController.googleLogin);
 };
