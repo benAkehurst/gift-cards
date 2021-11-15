@@ -5,6 +5,9 @@ const cryptoRandomString = require("crypto-random-string");
 const { format } = require("date-fns");
 const { v4: uuidv4 } = require("uuid");
 const sanitize = require("mongo-sanitize");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.CLIENT_ID);
+const { async } = require("crypto-random-string");
 const {
   checkEmailExists,
   validateEmail,
@@ -15,9 +18,7 @@ const { generateQRCode } = require("../../services/QRCodeService");
 const { sendEmail } = require("../../services/emailService");
 const User = require("../models/user.model");
 const Code = require("../models/code.model");
-const { OAuth2Client } = require("google-auth-library");
-const { async } = require("crypto-random-string");
-const client = new OAuth2Client(process.env.CLIENT_ID);
+const { GetCards } = require("../db/index");
 
 /**
  * Creates a new user object in the DB
@@ -29,8 +30,6 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
  *  "password": "Abc123!"
  *  "password2": "Abc123!"
  *  "acceptedTerms": true
- *  "createdOnDate": "string that clearly shows when a user is created"
- *  "uniqueId": "string with unique uuid for DB queries without exposing DB ID"
  * }
  */
 exports.create_new_user = async (req, res) => {
@@ -178,15 +177,26 @@ exports.login_user = async (req, res) => {
           data: err,
         });
       }
-      let token = jwt.sign({ id: user.userUID }, process.env.JWT_SECRET);
+      let token = jwt.sign(
+        { id: user.userUID },
+        process.env.JWT_SECRET,
+        rememberMe
+          ? {
+              expiresIn: "96h",
+            }
+          : { expiresIn: "1h" }
+      );
+      let cards = await GetCards(user._id);
       let userFiltered = _.pick(user.toObject(), [
         "firstName",
+        "lastName",
+        "email",
+        "userUID",
         "customerId",
-        "uniqueId",
         "qrCode",
-        "current_stamps",
       ]);
       userFiltered.token = token;
+      userFiltered.cards = cards;
       res.status(200).json({
         success: true,
         message: "Successfully logged in",
@@ -243,7 +253,7 @@ exports.validate_user_email_and_account = async (req, res) => {
 };
 
 /**
- * Sends a code to the user to allow them to reset their passowrd
+ * Sends a code to the user to allow them to reset their password
  * POST
  * PARAMS:
  * {
@@ -252,16 +262,22 @@ exports.validate_user_email_and_account = async (req, res) => {
  */
 exports.get_reset_password_code = async (req, res) => {
   const { email } = req.body;
+  const { token } = req.params;
   if (!email) {
     res.status(400).json({
       success: false,
       message: "Please provide your registered email address!",
       data: null,
     });
+  } else if (!jwt.verify(token, process.env.JWT_SECRET)) {
+    res.status(501).json({
+      success: false,
+      message: "Token not valid.",
+      data: null,
+    });
   } else {
     try {
       const user = await User.findOne({ email: sanitize(email) });
-
       if (!user) {
         res.status(400).json({
           success: false,
@@ -326,11 +342,7 @@ exports.verify_new_user_password = async (req, res) => {
       message: "The entered passwords do not match!",
       data: null,
     });
-  } else if (
-    !password.match(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/
-    )
-  ) {
+  } else if (!validatePassword(password)) {
     res.status(400).json({
       success: false,
       message:
@@ -381,10 +393,17 @@ exports.verify_new_user_password = async (req, res) => {
  */
 exports.delete_user_account = async (req, res) => {
   const { password, uniqueId } = req.body;
+  const { token } = req.params;
   if (!password) {
     res.status(400).json({
       success: false,
       message: "Please provide your password",
+      data: null,
+    });
+  } else if (!jwt.verify(token, process.env.JWT_SECRET)) {
+    res.status(501).json({
+      success: false,
+      message: "Token not valid.",
       data: null,
     });
   } else {
@@ -398,7 +417,6 @@ exports.delete_user_account = async (req, res) => {
         });
       } else {
         const pwCheckSuccess = await bcrypt.compare(password, user.password);
-
         if (!pwCheckSuccess) {
           res.status(400).json({
             success: false,
@@ -409,7 +427,6 @@ exports.delete_user_account = async (req, res) => {
           const deleted = await User.deleteOne({
             email: user.email,
           });
-
           if (!deleted) {
             res.status(400).json({
               success: false,

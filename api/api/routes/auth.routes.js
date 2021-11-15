@@ -9,7 +9,7 @@ module.exports = (app) => {
     .route("/api/v2/auth/verification/verify-account/:uniqueId/:secretCode")
     .get(authController.validate_user_email_and_account);
   app
-    .route("/api/v2/auth/password-reset/get-code")
+    .route("/api/v2/auth/password-reset/get-code/:token")
     .post(authController.get_reset_password_code);
   app
     .route("/api/v2/auth/password-reset/verify-code")
