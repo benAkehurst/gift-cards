@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const StoreAdmin = mongoose.model('StoreAdmin');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { format } = require('date-fns');
 const { v4: uuidv4 } = require('uuid');
 const sanitize = require('mongo-sanitize');
 
 exports.add_store = async (req, res) => {
-  const { token } = req.params;
   const {
-    storeAdmin,
+    storeAdminName,
+    adminEmail,
+    adminPassword,
     storeName,
     storeAddress,
     storePostcode,
@@ -22,7 +25,7 @@ exports.add_store = async (req, res) => {
       data: null,
     });
   } else if (
-    !storeAdmin ||
+    !storeAdminName ||
     !storeName ||
     !storeAddress ||
     !storePostcode ||
@@ -34,17 +37,17 @@ exports.add_store = async (req, res) => {
       message: 'Please provide all required fields',
       data: null,
     });
-  } else if (!jwt.verify(token, process.env.SECRET_KEY)) {
-    res.status(401).json({
-      success: false,
-      message: 'Token not valid',
-      data: null,
-    });
   } else {
     try {
+      const storeAdmin = new StoreAdmin({
+        storeAdminName,
+        adminEmail,
+        adminPassword: bcrypt.hashSync(adminPassword, 14),
+      });
+      await storeAdmin.save();
       const store = new Store({
         storeName: storeName,
-        storeAdmin: storeAdmin,
+        storeAdmin: storeAdmin._id,
         uniqueStoreId: uuidv4(),
         storeDetails: {
           address: storeAddress,

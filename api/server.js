@@ -67,10 +67,12 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));
 const adminRoutes = require('./api/routes/admin.routes');
 const authRoutes = require('./api/routes/auth.routes');
 const stampRoutes = require('./api/routes/stamp.routes');
+const storeRoutes = require('./api/routes/store.routes');
 const userRoutes = require('./api/routes/user.routes');
 adminRoutes(app);
 authRoutes(app);
 stampRoutes(app);
+storeRoutes(app);
 userRoutes(app);
 
 // 404 Handling
