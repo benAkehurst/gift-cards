@@ -1,5 +1,4 @@
-'use strict';
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
@@ -26,30 +25,9 @@ const UserSchema = new Schema(
     createdOnDate: {
       type: String,
     },
-    customerId: {
-      type: String,
-    },
     userUID: {
       type: String,
       required: false,
-    },
-    qrCode: {
-      type: String,
-      required: false,
-    },
-    current_stamps: {
-      type: Number,
-      default: 0,
-    },
-    completed_cards: {
-      type: Array,
-    },
-    transactions: {
-      type: Array,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
     userActive: {
       type: Boolean,
@@ -58,8 +36,23 @@ const UserSchema = new Schema(
     userAcquisitionLocation: {
       type: String,
     },
+    cards: {
+      type: Array,
+      default: [],
+    },
+    stores_ref: {
+      type: Array,
+      default: [],
+    },
+    customerId: {
+      type: String,
+    },
+    qrCode: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
