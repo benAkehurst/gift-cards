@@ -156,7 +156,7 @@ exports.add_stamp = async (req, res) => {
       return res.status(500).json({
         success: false,
         message:
-          'General error adding stamp to user - Error on /api/v1/stamps/add-stamp/:customerId/:numberOfStamps',
+          'General error adding stamp to user - Error on /api/v2/stamps/add-stamp/:customerId/:numberOfStamps',
         data: err,
       });
     }

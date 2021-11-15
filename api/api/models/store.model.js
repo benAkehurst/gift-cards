@@ -1,23 +1,23 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const StoreSchema = new Schema({
-  store_name: {
+  storeName: {
     type: String,
   },
-  store_admin: {
+  storeAdmin: {
     type: String,
   },
-  unique_store_id: {
+  uniqueStoreId: {
     type: String,
   },
-  address: {
+  storeDetails: {
     type: Object,
   },
-  users_ref: {
+  usersRef: {
     type: Array,
     default: [],
   },
 });
 
-module.exports = mongoose.model("Store", StoreSchema);
+module.exports = mongoose.model('Store', StoreSchema);
