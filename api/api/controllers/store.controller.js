@@ -108,4 +108,3 @@ exports.remove_store = async (req, res) => {
     }
   }
 };
-exports.add_admin = async (req, res) => {};
