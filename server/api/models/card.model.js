@@ -15,6 +15,9 @@ const CardModel = new Schema(
       type: Array,
       default: [],
     },
+    store_ref: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

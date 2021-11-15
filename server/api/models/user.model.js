@@ -40,7 +40,7 @@ const UserSchema = new Schema(
       type: Array,
       default: [],
     },
-    stores: {
+    stores_ref: {
       type: Array,
       default: [],
     },

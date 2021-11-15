@@ -14,7 +14,7 @@ const StoreSchema = new Schema({
   address: {
     type: Object,
   },
-  store_users: {
+  users_ref: {
     type: Array,
     default: [],
   },
