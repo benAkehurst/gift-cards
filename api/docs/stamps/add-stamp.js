@@ -1,14 +1,14 @@
 module.exports = {
   post: {
-    tags: ["Auth CRUD Operations"],
-    description: "Login to app and create session.",
-    operationId: "login",
+    tags: ["Stamp CRUD Operations"],
+    description: "Adds a stamp to a card in a customer.",
+    operationId: "addStamp",
     parameters: [],
     requestBody: {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/loginInput",
+            $ref: "#/components/schemas/addStamp",
           },
         },
       },

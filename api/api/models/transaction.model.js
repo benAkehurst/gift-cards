@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const StampSchema = new Schema({
+const TransactionSchema = new Schema({
   stamp_count: {
     type: Number,
   },
@@ -10,4 +10,4 @@ const StampSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Stamp", StampSchema);
+module.exports = mongoose.model("Transaction", TransactionSchema);
