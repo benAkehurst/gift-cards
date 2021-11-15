@@ -40,10 +40,6 @@ const UserSchema = new Schema(
       type: Array,
       default: [],
     },
-    stores_ref: {
-      type: Array,
-      default: [],
-    },
     customerId: {
       type: String,
     },
