@@ -72,5 +72,38 @@ exports.add_store = async (req, res) => {
   }
 };
 
-exports.remove_store = async (req, res) => {};
+exports.remove_store = async (req, res) => {
+  const { storeId } = req.params;
+  if (!storeId) {
+    res.status(400).json({
+      success: false,
+      message: 'Please provide store id',
+      data: null,
+    });
+  } else {
+    try {
+      const store = await Store.findById(storeId);
+      if (!store) {
+        res.status(404).json({
+          success: false,
+          message: 'Store not found',
+          data: null,
+        });
+      } else {
+        await store.remove();
+        res.status(200).json({
+          success: true,
+          message: 'Store removed',
+          data: null,
+        });
+      }
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+        data: null,
+      });
+    }
+  }
+};
 exports.add_admin = async (req, res) => {};
