@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CardModel = new Schema(
   {
-    current_stamps: {
+    currentStamps: {
       type: Number,
       default: 0,
     },
@@ -11,15 +11,18 @@ const CardModel = new Schema(
       type: Array,
       default: [],
     },
-    completed_cards: {
+    completedCards: {
       type: Array,
       default: [],
     },
-    store_ref: {
+    storeRef: {
+      type: String,
+    },
+    userRef: {
       type: String,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Card", CardModel);
+module.exports = mongoose.model('Card', CardModel);
