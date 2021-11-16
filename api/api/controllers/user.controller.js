@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Store = mongoose.model('Store');
 const Card = mongoose.model('Card');
+const { GatherCardData } = require('../db/card.db');
 const { AddNewCardToUser } = require('../db/user.db');
 const { AddUserToStore } = require('../db/store.db');
 const jwt = require('jsonwebtoken');
@@ -25,14 +26,13 @@ exports.add_card = async (req, res) => {
       storeRef: storeId,
     });
     const generatedCard = await newCard.save();
-    const user = await AddNewCardToUser(userId, generatedCard._id);
+    await AddNewCardToUser(userId, generatedCard._id);
     await AddUserToStore(userId, storeId);
+    const cardData = await GatherCardData(generatedCard._id);
     res.status(201).json({
       success: true,
       message: 'Card added successfully.',
-      data: {
-        user,
-      },
+      data: cardData,
     });
     try {
     } catch (err) {
