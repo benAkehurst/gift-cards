@@ -91,7 +91,7 @@ exports.create_new_user = async (req, res) => {
         password: bcrypt.hashSync(req.body.password, 14),
         acceptedTerms: acceptedTerms,
         createdOnDate: format(new Date(), 'dd/MM/yyyy'),
-        uniqueId: uuidv4(),
+        userUID: uuidv4(),
         userActive: false,
         userAcquisitionLocation: 'Registration Form',
         customerId: customerId,
@@ -193,7 +193,7 @@ exports.login_user = async (req, res) => {
         'email',
         'userUID',
         'customerId',
-        'qrCode',
+        '_id',
       ]);
       userFiltered.token = token;
       userFiltered.cards = cards;
