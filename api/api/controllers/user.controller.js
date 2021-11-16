@@ -44,6 +44,42 @@ exports.add_card = async (req, res) => {
     }
   }
 };
-exports.get_all_cards = async (req, res) => {};
+
+exports.get_all_cards = async (req, res) => {
+  const { token, userId } = req.params;
+  if (!token || !userId) {
+    return res.status(400).send({
+      message: 'Missing required parameters',
+    });
+  }
+  if (!jwt.verify(token, process.env.JWT_SECRET)) {
+    res.status(501).json({
+      success: false,
+      message: 'Token not valid.',
+      data: null,
+    });
+  } else {
+    try {
+      const userCards = await Card.find({ userRef: userId });
+      const cardData = await Promise.all(
+        userCards.map(async (card) => {
+          return await GatherCardData(card._id);
+        })
+      );
+      res.status(200).json({
+        success: true,
+        message: 'User cards retrieved successfully.',
+        data: cardData,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: 'General error retrieving user cards',
+        data: null,
+      });
+    }
+  }
+};
+
 exports.remove_card = async (req, res) => {};
 exports.add_stamp = async (req, res) => {};
