@@ -15,7 +15,7 @@
     "react-google-login": "^5.2.2",
     "react-qr-reader": "^2.2.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "react-simple-pull-to-refresh": "^1.2.3",
     "react-test-renderer": "^16.13.1"
   },
@@ -50,6 +50,6 @@
     "@storybook/addon-links": "^6.1.16",
     "@storybook/addons": "^6.1.16",
     "@storybook/preset-create-react-app": "^3.1.5",
-    "@storybook/react": "^6.1.16"
+    "@storybook/react": "^6.5.13"
   }
 }
